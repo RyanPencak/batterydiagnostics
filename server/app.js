@@ -1,0 +1,66 @@
+// setup packages
+const express = require('express');
+const path = require('path');
+const app = express();
+const mongoose = require('mongoose');
+const batteryData = require('./api/models/batteryDataModel');
+const bodyParser = require('body-parser');
+
+app.disable('x-powered-by');
+app.use(bodyParser.json());
+
+app.use(express.static(path.resolve(__dirname, '..', 'build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+});
+
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+
+  err.status = 404;
+  next(err);
+});
+
+app.use((err, _req, res, _next) => {
+  console.log(err);
+  if (err.status) {
+    return res
+    .status(err.status)
+    .send(err.errors[0].messages[0]);
+  }
+
+  if (err.output && err.output.statusCode) {
+    return res
+    .status(err.output.statusCode)
+    .set('Content-Type', 'text/plain')
+    .send(err.message);
+  }
+
+  console.error(err.stack);
+  res.sendStatus(500);
+});
+
+module.exports = app;
+
+// define database url
+const dburl = 'mongodb://ryanpencak:rvp224224@ds223738.mlab.com:23738/battery_data';
+
+// Deployment production build
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+}
+
+// connect mongoose cloud
+mongoose.connect(dburl, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to mongoDB', err);
+  }
+  else {
+    console.log('Connection established to ', dburl);
+  }
+});
+
+// setup body parser
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json({ verify: bodyParser }));
