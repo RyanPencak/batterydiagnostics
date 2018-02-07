@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
-const batteryData = require('./api/models/batteryDataModel');
+const batteryData = require('./models/batteryDataModel');
 const bodyParser = require('body-parser');
 
 // define database url
