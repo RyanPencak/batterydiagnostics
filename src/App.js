@@ -6,7 +6,7 @@ import './App.css';
 class App extends Component {
 
   componentDidMount() {
-    axios.get('/batteryData')
+    axios.get('/api/batteryData')
     .then(({data}) => {console.log(data)})
     .catch(err => {console.log(err)});
   }
