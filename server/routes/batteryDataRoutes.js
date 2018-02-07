@@ -6,10 +6,9 @@ const Battery = mongoose.model('batteryData');
 
 router.get('/', (req, res, next) => {
   Battery.find({}, function(err, battery) {
-    if (err)
-      res.send(err);
+    if (err) res.send(err);
 
-    res.json(battery);
+    res.send(battery);
   });
 });
 
