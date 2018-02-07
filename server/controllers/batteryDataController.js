@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var Battery = mongoose.model('batteryData');
+const mongoose = require('mongoose');
+const Battery = mongoose.model('batteryData');
 
 exports.list_all_batteries = function(req, res) {
   Battery.find({}, function(err, battery) {

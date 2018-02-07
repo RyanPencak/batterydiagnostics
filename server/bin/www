@@ -8,6 +8,25 @@ var app = require('../app');
 var debug = require('debug')('app:server');
 var http = require('http');
 
+const mongoose = require('mongoose');
+
+// define database url
+const dburl = 'mongodb://ryanpencak:rvp224224@ds223738.mlab.com:23738/battery_data';
+
+// connect mongoose cloud
+mongoose.connect(dburl, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to mongoDB', err);
+  }
+  else {
+    console.log('Connection established to ', dburl);
+  }
+});
+
+
+
+
+
 /**
  * Get port from environment and store in Express.
  */

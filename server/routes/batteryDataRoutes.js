@@ -1,8 +1,17 @@
 const router = require('express').Router();
 const batteryData = require('../controllers/batteryDataController');
 
+const mongoose = require('mongoose');
+const Battery = mongoose.model('batteryData');
+
 router.get('/', (req, res, next) => {
-  batteryData.list_all_batteries});
+  Battery.find({}, function(err, battery) {
+    if (err)
+      res.send(err);
+
+    res.json(battery);
+  });
+});
 
 router.get('/:batteryId', (req, res, next) => {
   batteryData.read_battery});
