@@ -6,6 +6,19 @@ const mongoose = require('mongoose');
 const batteryData = require('./api/models/batteryDataModel');
 const bodyParser = require('body-parser');
 
+// define database url
+const dburl = 'mongodb://ryanpencak:rvp224224@ds223738.mlab.com:23738/battery_data';
+
+// connect mongoose cloud
+mongoose.connect(dburl, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to mongoDB', err);
+  }
+  else {
+    console.log('Connection established to ', dburl);
+  }
+});
+
 app.disable('x-powered-by');
 app.use(bodyParser.json());
 
@@ -42,25 +55,3 @@ app.use((err, _req, res, _next) => {
 });
 
 module.exports = app;
-
-// define database url
-const dburl = 'mongodb://ryanpencak:rvp224224@ds223738.mlab.com:23738/battery_data';
-
-// Deployment production build
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-}
-
-// connect mongoose cloud
-mongoose.connect(dburl, function (err, db) {
-  if (err) {
-    console.log('Unable to connect to mongoDB', err);
-  }
-  else {
-    console.log('Connection established to ', dburl);
-  }
-});
-
-// setup body parser
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json({ verify: bodyParser }));
