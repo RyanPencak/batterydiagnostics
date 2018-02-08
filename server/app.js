@@ -22,6 +22,8 @@ mongoose.connect(dburl, function (err, db) {
 app.disable('x-powered-by');
 app.use(bodyParser.json());
 
+console.log("bye");
+
 app.use('/api/battery', require('./routes/batteryDataRoutes'));
 
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
@@ -32,6 +34,8 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
+
+console.log("hello");
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');
