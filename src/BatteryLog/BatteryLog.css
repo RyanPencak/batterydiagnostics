@@ -1,0 +1,9 @@
+.Container {
+  background-color: #DDD;
+  box-shadow: 1px 4px 5px #999;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.BatteryLog {
+}

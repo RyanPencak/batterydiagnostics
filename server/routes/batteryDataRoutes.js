@@ -13,6 +13,16 @@ router.get('/', (req, res, next) => {
   });
 });
 
+router.post('/', (req, res, next) => {
+  var new_battery = new Battery(req.body);
+  new_battery.save(function(err, battery) {
+    if (err)
+      res.send(err);
+
+    res.json(battery);
+  });
+});
+
 router.get('/:batteryId', (req, res, next) => {
   batteryData.read_battery});
 
