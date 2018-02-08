@@ -2,11 +2,9 @@
 
 // requirements
 var app = require('../app');
-// var debug = require('debug')('app:server');
 var http = require('http');
 
 // set port
-// var port = normalizePort(process.env.PORT || 3001);
 var port = process.env.PORT || 3001;
 app.set('port', port);
 
@@ -15,56 +13,3 @@ var server = http.createServer(app);
 
 // start server and listen on designated port 3001
 server.listen(port);
-
-// set server events
-// server.on('error', onError);
-// server.on('listening', onListening);
-
-// check port
-// function normalizePort(val) {
-//   var port = parseInt(val, 10);
-//
-//   if (isNaN(port)) {
-//     return val;
-//   }
-//
-//   if (port >= 0) {
-//     return port;
-//   }
-//
-//   return false;
-// }
-
-// event for error
-// function onError(error) {
-//   if (error.syscall !== 'listen') {
-//     throw error;
-//   }
-//
-//   var bind = typeof port === 'string'
-//     ? 'Pipe ' + port
-//     : 'Port ' + port;
-//
-//   // handle specific listen errors with friendly messages
-//   switch (error.code) {
-//     case 'EACCES':
-//       console.error(bind + ' requires elevated privileges');
-//       process.exit(1);
-//       break;
-//     case 'EADDRINUSE':
-//       console.error(bind + ' is already in use');
-//       process.exit(1);
-//       break;
-//     default:
-//       throw error;
-//   }
-// }
-
-// event for listening
-// function onListening() {
-//   var addr = server.address();
-//   var bind = typeof addr === 'string'
-//     ? 'pipe ' + addr
-//     : 'port ' + addr.port;
-//   console.log('Listening on ' + bind);
-// }
