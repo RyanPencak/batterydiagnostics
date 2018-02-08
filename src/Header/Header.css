@@ -1,6 +1,8 @@
 .Header {
   text-align: center;
-  background-color: #4e535b;
+  /* background-color: #4e535b; */
+  background-color: #363c51;
+  border-radius: 10px;
   color: #cdd2d8;
   box-shadow: 1px 4px 5px #999;
   padding: 15px;
