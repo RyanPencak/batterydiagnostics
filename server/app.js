@@ -7,7 +7,7 @@ const batteryData = require('./models/batteryDataModel');
 const bodyParser = require('body-parser');
 
 // define database url
-const dburl = 'mongodb://ryanpencak:rvp224224@ds223738.mlab.com:23738/battery_data';
+const dburl = 'mongodb://ryanpencak:rvp224224@batterydiagnostics-shard-00-00-h1m74.mongodb.net:27017,batterydiagnostics-shard-00-01-h1m74.mongodb.net:27017,batterydiagnostics-shard-00-02-h1m74.mongodb.net:27017/test?ssl=true&replicaSet=BatteryDiagnostics-shard-0&authSource=admin';
 
 // connect mongoose cloud
 mongoose.connect(dburl, function (err, db) {
@@ -28,6 +28,32 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+});
+
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+
+  err.status = 404;
+  next(err);
+});
+
+app.use((err, _req, res, _next) => {
+  console.log(err);
+  if (err.status) {
+    return res
+    .status(err.status)
+    .send(err.errors[0].messages[0]);
+  }
+
+  if (err.output && err.output.statusCode) {
+    return res
+    .status(err.output.statusCode)
+    .set('Content-Type', 'text/plain')
+    .send(err.message);
+  }
+
+  console.error(err.stack);
+  res.sendStatus(500);
 });
 
 module.exports = app;
