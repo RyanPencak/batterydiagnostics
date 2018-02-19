@@ -10,15 +10,6 @@ export default class BatteryLog extends Component {
     super();
 
     this.state = {
-      // batteryData: [{
-      //   "log_date": '',
-      //   "_id": '',
-      //   "serial_number": '',
-      //   "rated_capacity": null,
-      //   "measured_capacity": null,
-      //   "cycle_count": null,
-      //   "__v": null
-      // }]
       batteryData: []
     };
   }
@@ -26,80 +17,11 @@ export default class BatteryLog extends Component {
   componentDidMount() {
     axios.get('/api/battery')
     .then(({data}) => {
-      // const batteryData = data.map(obj => ({log_data: obj.log_date, _id: obj._id, serial_number: obj.serial_number, rated_capacity: obj.rated_capacity, measured_capacity: obj.measured_capacity, cycle_count: obj.cycle_count, __v: obj.__v}));
-
-      // use this?
-      // this.setState({
-      //   batteryData: data
-      // });
-
-      // works!
-      this.setState({batteryData: data});
-
-      // this.setState({
-      //   log_date: data.log_date,
-      //   _id: data._id,
-      //   serial_number: data.serial_number,
-      //   rated_capacity: data.rated_capacity,
-      //   measured_capacity: data.measured_capacity,
-      //   cycle_count: data.cycle_count,
-      //   __v: data.__v
-      // });
+      this.setState({batteryData: data.reverse()});
     });
   }
 
-  // componentDidMount() {
-  //   // axios.get('https://bucknellbatterydiagnostics.herokuapp.com/batterydata', {
-  //   //   responseType: 'json'
-  //   // }).then(response => {
-  //   //     this.setState({ batteryData: response.data });
-  //   //   });
-  //
-    // axios
-    //   .get('/api/battery', {responseType: 'json'})
-    //   .then(({ data }) => {
-        // const batteryData = response.data.map(obj => ({log_data: obj.log_date, _id: obj._id, serial_number: obj.serial_number, rated_capacity: obj.rated_capacity, measured_capacity: obj.measured_capacity, cycle_count: obj.cycle_count, __v: obj.__v}));
-        // this.setState({ batteryData });
-      	// this.setState({
-        //   log_data: data.log_date,
-        //   _id: data._id,
-        //   serial_number: data.serial_number,
-        //   rated_capacity: data.rated_capacity,
-        //   measured_capacity: data.measured_capacity,
-        //   cycle_count: data.cycle_count,
-        //   __v: data.__v
-        // });
-        // this.setState({
-        //   batteryData: response.data
-        // })
-        // this.setState({
-        //   batteryData = response.data.map(obj => ({log_data: obj.log_date, _id: obj._id, serial_number: obj.serial_number, rated_capacity: obj.rated_capacity, measured_capacity: obj.measured_capacity, cycle_count: obj.cycle_count, __v: obj.__v}));
-        // })
-      // })
-  // }
-
-
   render() {
-    // const batteryData = this.state;
-    // const { log_date, _id, serial_number, rated_capacity, measured_capacity, cycle_count, __v } = this.state;
-
-    // var log_date;
-    // var _id;
-    // var serial_number = this.state.batteryData.serial_number;
-    // var rated_capacity = this.state.batteryData.rated_capacity;
-    // var measured_capacity;
-    // var cycle_count;
-    // var __v;
-    //
-    // {this.state.batteryData.map(function(item, key) {
-    //   log_date = item.log_date;
-    //   _id = item._id;
-    //   serial_number = item.serial_number;
-    //   rated_capacity = item.rated_capacity;
-    //   measured_capacity = item.measured_capacity;
-    //   cycle_count = item.cycle_count;
-    //   __v = item.__v;
-    // })};
 
     return (
       <div className="Container">
@@ -113,33 +35,31 @@ export default class BatteryLog extends Component {
           columns={[
             {
               Header: "Serial Number",
-              accessor: "serial_number"
+              accessor: "serial_number",
+              aggregate: (values, rows) => values[0]
             },
             {
               Header: "Rated Capacity",
-              accessor: "rated_capacity"
+              accessor: "rated_capacity",
+              aggregate: (values, rows) => values[0]
             },
             {
               Header: "Measured Capacity",
-              accessor: "measured_capacity"
+              accessor: "measured_capacity",
+              aggregate: (values, rows) => values[0]
             },
             {
               Header: "Cycle Count",
-              accessor: "cycle_count"
+              accessor: "cycle_count",
+              aggregate: (values, rows) => values[0]
             },
             {
               Header: "Log Date",
-              accessor: "log_date"
+              accessor: "log_date",
+              aggregate: (values, rows) => values[0]
             }
           ]}
-          // manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          // sn={this.state.batteryData.serial_number}
-          // rated_capacity={this.state.batteryData.rated_capacity}
-          // measured_capacity={this.state.batteryData.measured_capacity}
-          // cycle_count={this.state.batteryData.cycle_count}
-          // log_date={this.state.batteryData.log_date}
-          // _id={this.state.batteryData._id}
-          // __v={this.state.batteryData.__v}
+          pivotBy={['serial_number']}
           filterable
           defaultPageSize={10}
           className="-striped -highlight"

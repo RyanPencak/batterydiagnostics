@@ -6,6 +6,9 @@ import axios from 'axios';
 class App extends Component {
 
   componentDidMount() {
+
+    document.title = "Battery Diagnostics"
+
     axios.get('/api/battery')
     .then(({data}) => {console.log(data)})
     .catch(err => {console.log(err)});
