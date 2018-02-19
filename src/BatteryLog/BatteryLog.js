@@ -10,15 +10,16 @@ export default class BatteryLog extends Component {
     super();
 
     this.state = {
-      batteryData: [{
-        log_date: '',
-        _id: '',
-        serial_number: '',
-        rated_capacity: null,
-        measured_capacity: null,
-        cycle_count: null,
-        __v: null
-      }]
+      // batteryData: [{
+      //   "log_date": '',
+      //   "_id": '',
+      //   "serial_number": '',
+      //   "rated_capacity": null,
+      //   "measured_capacity": null,
+      //   "cycle_count": null,
+      //   "__v": null
+      // }]
+      batteryData: []
     };
   }
 
@@ -26,9 +27,15 @@ export default class BatteryLog extends Component {
     axios.get('/api/battery')
     .then(({data}) => {
       // const batteryData = data.map(obj => ({log_data: obj.log_date, _id: obj._id, serial_number: obj.serial_number, rated_capacity: obj.rated_capacity, measured_capacity: obj.measured_capacity, cycle_count: obj.cycle_count, __v: obj.__v}));
-      this.setState({
-        batteryData: data
-      });
+
+      // use this?
+      // this.setState({
+      //   batteryData: data
+      // });
+
+      // works!
+      this.setState({batteryData: data});
+
       // this.setState({
       //   log_date: data.log_date,
       //   _id: data._id,
@@ -71,19 +78,38 @@ export default class BatteryLog extends Component {
       // })
   // }
 
+
   render() {
     // const batteryData = this.state;
-    const { log_date, _id, serial_number, rated_capacity, measured_capacity, cycle_count, __v } = this.state;
+    // const { log_date, _id, serial_number, rated_capacity, measured_capacity, cycle_count, __v } = this.state;
+
+    // var log_date;
+    // var _id;
+    // var serial_number = this.state.batteryData.serial_number;
+    // var rated_capacity = this.state.batteryData.rated_capacity;
+    // var measured_capacity;
+    // var cycle_count;
+    // var __v;
+    //
+    // {this.state.batteryData.map(function(item, key) {
+    //   log_date = item.log_date;
+    //   _id = item._id;
+    //   serial_number = item.serial_number;
+    //   rated_capacity = item.rated_capacity;
+    //   measured_capacity = item.measured_capacity;
+    //   cycle_count = item.cycle_count;
+    //   __v = item.__v;
+    // })};
 
     return (
       <div className="Container">
 
         <div className="BatteryLog">
           <h2>Battery Log</h2>
-          <p>{this.state.serial_number}</p>
         </div>
 
         <ReactTable
+          data = {this.state.batteryData}
           columns={[
             {
               Header: "Serial Number",
@@ -91,33 +117,29 @@ export default class BatteryLog extends Component {
             },
             {
               Header: "Rated Capacity",
-              id: "rated_capacity",
-              accessor: d => d.rated_capacity
+              accessor: "rated_capacity"
             },
             {
               Header: "Measured Capacity",
-              id: "measured_capacity",
-              accessor: d => d.measured_capacity
+              accessor: "measured_capacity"
             },
             {
               Header: "Cycle Count",
-              id: "cycle_count",
-              accessor: d => d.cycle_count
+              accessor: "cycle_count"
             },
             {
               Header: "Log Date",
-              id: "log_date",
-              accessor: d => d.log_date
+              accessor: "log_date"
             }
           ]}
-          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          serial_number={serial_number}
-          rated_capacity={rated_capacity}
-          measured_capacity={measured_capacity}
-          cycle_count={cycle_count}
-          log_date={log_date}
-          _id={_id}
-          __v={__v}
+          // manual // Forces table not to paginate or sort automatically, so we can handle it server-side
+          // sn={this.state.batteryData.serial_number}
+          // rated_capacity={this.state.batteryData.rated_capacity}
+          // measured_capacity={this.state.batteryData.measured_capacity}
+          // cycle_count={this.state.batteryData.cycle_count}
+          // log_date={this.state.batteryData.log_date}
+          // _id={this.state.batteryData._id}
+          // __v={this.state.batteryData.__v}
           filterable
           defaultPageSize={10}
           className="-striped -highlight"
