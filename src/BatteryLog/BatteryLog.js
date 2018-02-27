@@ -34,6 +34,11 @@ export default class BatteryLog extends Component {
           data = {this.state.batteryData}
           columns={[
             {
+              Header: "Device ID",
+              accessor: "device_id",
+              aggregate: (values, rows) => values[0]
+            },
+            {
               Header: "Serial Number",
               accessor: "serial_number",
               aggregate: (values, rows) => values[0]
@@ -51,11 +56,6 @@ export default class BatteryLog extends Component {
             {
               Header: "Cycle Count",
               accessor: "cycle_count",
-              aggregate: (values, rows) => values[0]
-            },
-            {
-              Header: "Log Date",
-              accessor: "log_date",
               aggregate: (values, rows) => values[0]
             }
           ]}

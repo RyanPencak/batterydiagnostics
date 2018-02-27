@@ -26,6 +26,14 @@ router.post('/', (req, res, next) => {
 router.get('/:batteryId', (req, res, next) => {
   batteryData.read_battery});
 
+router.delete('/:batteryId', (req, res, next) => {
+  Battery.remove({_id: req.params.batteryId}, function(err, battery) {
+    if (err)
+      res.send(err);
+    res.json({message: 'Battery Deleted'});
+  });
+})
+
 module.exports = router;
 
 
