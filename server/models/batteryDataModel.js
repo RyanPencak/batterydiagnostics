@@ -21,15 +21,6 @@ var BatteryDataSchema = new Schema({
     type: Number,
     required: 'enter charge cycle count'
   },
-  charging_voltage: {
-    type: Array
-  },
-  charging_current: {
-    type: Array
-  },
-  charging_capacity: {
-    type: Array
-  },
   discharging_voltage: {
     type: Array
   },
