@@ -63,33 +63,6 @@ app.use((err, _req, res, _next) => {
 // HTTP Get Request
 
 const get_url = "https://batterydiagnostics.herokuapp.com/api/battery";
-// var data;
-
-// function getBatteryData() {
-//   return https.get(get_url, res => {
-//     res.setEncoding("utf8");
-//     var body = "";
-//     res.on("data", data => {
-//       body += data;
-//     });
-//     res.on("end", () => {
-//       body = JSON.parse(body);
-//       console.log(body[0].serial_number);
-//       return body;
-//     });
-//   });
-// }
-
-// function getBatteryData() {
-//   // var data;
-//
-//   axios.get(get_url)
-//     .then(function (result) {
-//         sendReport(result);
-//     });
-//
-//   // return data;
-// }
 
 function getBatteryData() {
   return axios.get(get_url)
@@ -99,10 +72,6 @@ function getBatteryData() {
       return this.response;
   })
 }
-
-// data = getBatteryData();
-
-// console.log(data);
 
 // nodemailer transporter
 var transporter = nodemailer.createTransport({
@@ -135,11 +104,9 @@ function sendReport(email_contents) {
 // call getBatteryData and use data to send email
 getBatteryData()
   .then(data => {
-    console.log(data[0]);
     data = data.reverse();
     new_post = data[0];
     var email_contents = JSON.stringify(new_post);
-    console.log(new_post.is_software);
 
     if(! new_post.is_software)
     {
