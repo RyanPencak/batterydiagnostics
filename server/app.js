@@ -75,10 +75,17 @@ function getBatteryData() {
 
 // nodemailer transporter
 var transporter = nodemailer.createTransport({
-  service: 'Gmail',
+  // service: 'Gmail',
+  // auth: {
+  //   user: 'BatteryDiagnosticServer@gmail.com',
+  //   pass: 'fv!Y4R=cv=+6!Tw4,wpdyuRr'
+  // }
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
-    user: 'BatteryDiagnosticServer@gmail.com',
-    pass: 'fv!Y4R=cv=+6!Tw4,wpdyuRr'
+      user: 'BatteryDiagnosticServer@gmail.com',
+      pass: 'fv!Y4R=cv=+6!Tw4,wpdyuRr'
   }
 });
 
