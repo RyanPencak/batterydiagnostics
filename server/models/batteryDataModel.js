@@ -30,6 +30,10 @@ var BatteryDataSchema = new Schema({
   discharging_capacity: {
     type: Array
   },
+  is_software: {
+    type: Boolean,
+    default: false
+  },
   log_date: {
     type: Date,
     default: Date.now

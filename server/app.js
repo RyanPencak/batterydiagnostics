@@ -5,6 +5,9 @@ const app = express();
 const mongoose = require('mongoose');
 const batteryData = require('./models/batteryDataModel');
 const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
+const axios = require('axios');
+// const https = require('https');
 
 // define database url
 const dburl = 'mongodb://ryanpencak:rvp224224@batterydiagnostics-shard-00-00-h1m74.mongodb.net:27017,batterydiagnostics-shard-00-01-h1m74.mongodb.net:27017,batterydiagnostics-shard-00-02-h1m74.mongodb.net:27017/test?ssl=true&replicaSet=BatteryDiagnostics-shard-0&authSource=admin';
@@ -55,5 +58,100 @@ app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.sendStatus(500);
 });
+
+
+// HTTP Get Request
+
+const get_url = "https://batterydiagnostics.herokuapp.com/api/battery";
+// var data;
+
+// function getBatteryData() {
+//   return https.get(get_url, res => {
+//     res.setEncoding("utf8");
+//     var body = "";
+//     res.on("data", data => {
+//       body += data;
+//     });
+//     res.on("end", () => {
+//       body = JSON.parse(body);
+//       console.log(body[0].serial_number);
+//       return body;
+//     });
+//   });
+// }
+
+// function getBatteryData() {
+//   // var data;
+//
+//   axios.get(get_url)
+//     .then(function (result) {
+//         sendReport(result);
+//     });
+//
+//   // return data;
+// }
+
+function getBatteryData() {
+  return axios.get(get_url)
+    .then(response => {
+      // console.log(response.data[0]);
+      this.response = response.data;
+      return this.response;
+  })
+}
+
+// data = getBatteryData();
+
+// console.log(data);
+
+// nodemailer transporter
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'BatteryDiagnosticServer@gmail.com',
+    pass: 'fv!Y4R=cv=+6!Tw4,wpdyuRr'
+  }
+});
+
+// function to send battery report
+function sendReport(email_contents) {
+  // set email data
+  var mailOptions = {
+      from: '"Battery Diagnostics Server" <BatteryDiagnosticServer@gmail.com>', // sender address
+      to: 'rvp002@bucknell.edu', // list of receivers
+      subject: 'Battery Report', // Subject line
+      text: email_contents // plain text body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          return console.log(error);
+      }
+      console.log('Message sent: %s', info.messageId);
+  });
+}
+
+// call getBatteryData and use data to send email
+getBatteryData()
+  .then(data => {
+    console.log(data[0]);
+    data = data.reverse();
+    new_post = data[0];
+    var email_contents = JSON.stringify(new_post);
+    console.log(new_post.is_software);
+
+    if(! new_post.is_software)
+    {
+      sendReport(email_contents);
+    }
+    else if((new_post.measured_capacity/new_post.rated_capacity) < 0.40)
+    {
+      sendReport(email_contents);
+    }
+  });
+
+
+// export module
 
 module.exports = app;
