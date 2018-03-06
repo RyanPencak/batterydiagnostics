@@ -94,7 +94,7 @@ function sendReport(email_contents) {
   // set email data
   var mailOptions = {
       from: '"Battery Diagnostics Server" <BatteryDiagnosticServer@gmail.com>', // sender address
-      to: 'rvp002@bucknell.edu', // list of receivers
+      to: 'BatteryDiagnosticServer@gmail.com', // list of receivers
       subject: 'Battery Report', // Subject line
       text: email_contents // plain text body
   };
