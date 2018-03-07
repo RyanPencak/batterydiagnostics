@@ -57,6 +57,11 @@ export default class BatteryLog extends Component {
               Header: "Cycle Count",
               accessor: "cycle_count",
               aggregate: (values, rows) => values[0]
+            },
+            {
+              Header: "Date Logged",
+              accessor: "log_date",
+              aggregate: (values, rows) => values[0]
             }
           ]}
           pivotBy={['serial_number']}
