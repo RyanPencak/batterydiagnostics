@@ -2,32 +2,32 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var BatteryDataSchema = new Schema({
-  device_id: {
+  serialNum: {
+    type: String,
+    required: 'enter battery serial number'
+  },
+  laptopId: {
     type: String
   },
-  serial_number: {
-    type: String,
-    required: 'enter battery id'
-  },
-  rated_capacity: {
+  rCap: {
     type: Number,
     required: 'enter expected battery capacity'
   },
-  measured_capacity: {
+  mCap: {
     type: Number,
     required: 'enter current battery capacity'
   },
-  cycle_count: {
+  cycles: {
     type: Number,
     required: 'enter charge cycle count'
   },
-  discharging_voltage: {
+  dcVol: {
     type: Array
   },
-  discharging_current: {
+  dcCur: {
     type: Array
   },
-  discharging_capacity: {
+  dcCap: {
     type: Array
   },
   is_software: {

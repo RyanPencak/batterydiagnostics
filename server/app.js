@@ -10,7 +10,7 @@ const axios = require('axios');
 // const https = require('https');
 
 // define database url
-const dburl = 'mongodb://ryanpencak:rvp224224@batterydiagnostics-shard-00-00-h1m74.mongodb.net:27017,batterydiagnostics-shard-00-01-h1m74.mongodb.net:27017,batterydiagnostics-shard-00-02-h1m74.mongodb.net:27017/test?ssl=true&replicaSet=BatteryDiagnostics-shard-0&authSource=admin';
+const dburl = 'mongodb://ryanpencak:rvp224224@batterydata-shard-00-00-h1m74.mongodb.net:27017,batterydata-shard-00-01-h1m74.mongodb.net:27017,batterydata-shard-00-02-h1m74.mongodb.net:27017/test?ssl=true&replicaSet=BatteryData-shard-0&authSource=admin';
 
 // connect mongoose cloud
 mongoose.connect(dburl, function (err, db) {
