@@ -1,7 +1,8 @@
 import './BatteryLog.css';
 import React, { Component } from 'react';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
+// import ReactTable from 'react-table';
+// import 'react-table/react-table.css';
+import { Table } from 'react-bootstrap';
 import axios from 'axios';
 
 export default class BatteryLog extends Component {
@@ -17,7 +18,7 @@ export default class BatteryLog extends Component {
   componentDidMount() {
     axios.get('/api/battery')
     .then(({data}) => {
-      this.setState({batteryData: data.reverse()});
+      this.setState({batteryData: data});
     });
   }
 
@@ -30,39 +31,32 @@ export default class BatteryLog extends Component {
           <h2>Battery Log</h2>
         </div>
 
-        <ReactTable
-          data = {this.state.batteryData}
-          columns={[
-            {
-              Header: "Laptop ID",
-              accessor: "laptopId"
-            },
-            {
-              Header: "Serial Number",
-              accessor: "serialNum"
-            },
-            {
-              Header: "Rated Capacity",
-              accessor: "rCap"
-            },
-            {
-              Header: "Measured Capacity",
-              accessor: "mCap"
-            },
-            {
-              Header: "Cycle Count",
-              accessor: "cycles"
-            },
-            {
-              Header: "Date Logged",
-              accessor: "log_date"
-            }
-          ]}
-          filterable
-          defaultPageSize={10}
-          className="-striped -highlight"
-        />
-
+        <div className="BootstrapTable">
+          <Table striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th id="_id">Post ID (BatteryId)</th>
+                <th>Battery Serial Number</th>
+                <th>Laptop ID</th>
+                <th>% Capacity</th>
+                <th>Battery Quality</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.batteryData.map(battery => {
+                return (
+                  <tr>
+                    <td id="_id">{battery._id}</td>
+                    <td>{battery.serialNum}</td>
+                    <td>{battery.laptopId}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        </div>
 
       </div>
     );

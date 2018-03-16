@@ -1,11 +1,14 @@
-.Container {
-  /* background-color: #DDD; */
+/* .Container {
   background-color: #a3a7b7;
   border-radius: 25px;
   box-shadow: 1px 4px 5px #999;
   padding: 15px;
   margin-top: 20px;
-}
+} */
 
 .BatteryLog {
+}
+
+#_id {
+  display: none;
 }

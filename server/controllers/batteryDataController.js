@@ -24,7 +24,7 @@ exports.list_all_batteries = function(req, res) {
 exports.create_battery = function(req, res) {
   var query = { serialNum: req.body.serialNum };
   var update = { "cycles": req.body.cycles, "dcVol": req.body.dcVol, "dcCur": req.body.dcCur, "dcCap": req.body.dcCap, "log_date": Date.now() };
-  var options = { upsert: true , new: true, runValidators: true};
+  var options = { new: true, runValidators: true };
   Battery.findOneAndUpdate(query, update, options, function(err, battery) {
     if (err) {
       res.send(err);
@@ -32,7 +32,12 @@ exports.create_battery = function(req, res) {
 
     else {
 
-      battery.mCap.push(req.body.mCap);
+      if(!battery) {
+        var battery = new Battery(req.body);
+      }
+      else {
+        battery.mCap.push(req.body.mCap);
+      }
 
       battery.save(function(err, bat) {
         if (err)
