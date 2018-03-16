@@ -2,7 +2,7 @@ import './BatteryLog.css';
 import React, { Component } from 'react';
 // import ReactTable from 'react-table';
 // import 'react-table/react-table.css';
-import { Table } from 'react-bootstrap';
+import { Table, Glyphicon } from 'react-bootstrap';
 import axios from 'axios';
 
 export default class BatteryLog extends Component {
@@ -45,12 +45,14 @@ export default class BatteryLog extends Component {
             <tbody>
               {this.state.batteryData.map(battery => {
                 return (
-                  <tr>
+                  <tr key={battery._id}>
                     <td id="_id">{battery._id}</td>
                     <td>{battery.serialNum}</td>
                     <td>{battery.laptopId}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{(battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100} %</td>
+                    <td>
+                      {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                    </td>
                   </tr>
                 )
               })}
