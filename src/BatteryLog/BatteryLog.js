@@ -34,41 +34,35 @@ export default class BatteryLog extends Component {
           data = {this.state.batteryData}
           columns={[
             {
-              Header: "Device ID",
-              accessor: "device_id",
-              aggregate: (values, rows) => values[0]
+              Header: "Laptop ID",
+              accessor: "laptopId"
             },
             {
               Header: "Serial Number",
-              accessor: "serial_number",
-              aggregate: (values, rows) => values[0]
+              accessor: "serialNum"
             },
             {
               Header: "Rated Capacity",
-              accessor: "rated_capacity",
-              aggregate: (values, rows) => values[0]
+              accessor: "rCap"
             },
             {
               Header: "Measured Capacity",
-              accessor: "measured_capacity",
-              aggregate: (values, rows) => values[0]
+              accessor: "mCap"
             },
             {
               Header: "Cycle Count",
-              accessor: "cycle_count",
-              aggregate: (values, rows) => values[0]
+              accessor: "cycles"
             },
             {
               Header: "Date Logged",
-              accessor: "log_date",
-              aggregate: (values, rows) => values[0]
+              accessor: "log_date"
             }
           ]}
-          pivotBy={['serial_number']}
           filterable
           defaultPageSize={10}
           className="-striped -highlight"
         />
+
 
       </div>
     );

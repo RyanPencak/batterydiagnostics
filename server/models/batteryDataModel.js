@@ -14,7 +14,7 @@ var BatteryDataSchema = new Schema({
     required: 'enter expected battery capacity'
   },
   mCap: {
-    type: Number,
+    type: Array,
     required: 'enter current battery capacity'
   },
   cycles: {
