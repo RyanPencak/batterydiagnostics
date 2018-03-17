@@ -9,6 +9,15 @@
 .BatteryLog {
 }
 
+.BootstrapTable {
+
+}
+
+.TableButtons {
+  display: flex;
+  align-items: right;
+}
+
 #_id {
   display: none;
 }

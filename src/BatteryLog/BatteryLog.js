@@ -2,7 +2,7 @@ import './BatteryLog.css';
 import React, { Component } from 'react';
 // import ReactTable from 'react-table';
 // import 'react-table/react-table.css';
-import { Table, Pager, Glyphicon } from 'react-bootstrap';
+import { Table, FormGroup, Radio, Button, Glyphicon } from 'react-bootstrap';
 import axios from 'axios';
 
 export default class BatteryLog extends Component {
@@ -37,6 +37,14 @@ export default class BatteryLog extends Component {
     return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
   }
 
+  generateReport() {
+
+  }
+
+  deleteBattery() {
+
+  }
+
   render() {
 
     return (
@@ -47,37 +55,42 @@ export default class BatteryLog extends Component {
         </div>
 
         <div className="BootstrapTable">
-          <Pager>
-            <Table striped bordered condensed hover responsive >
-              <thead>
-                <tr>
-                  <th id="_id">Post ID (BatteryId)</th>
-                  <th>Battery Serial Number</th>
-                  <th>Laptop ID</th>
-                  <th>% Capacity</th>
-                  <th>Battery Quality</th>
-                  <th>Log Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.batteryData.map(battery => {
-                  return (
-                    <tr key={battery._id}>
-                      <td id="_id">{battery._id}</td>
-                      <td>{battery.serialNum}</td>
-                      <td>{battery.laptopId}</td>
-                      <td>{(battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100} %</td>
-                      <td>
-                        {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
-                      </td>
-                      <td>{this.formatDate(battery.log_date)}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </Table>
-          </Pager>
+          <Table striped bordered condensed hover responsive >
+            <thead>
+              <tr>
+                <th id="_id">Post ID (BatteryId)</th>
+                <th></th>
+                <th>Battery Serial Number</th>
+                <th>Laptop ID</th>
+                <th>% Capacity</th>
+                <th>Battery Quality</th>
+                <th>Log Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.batteryData.map(battery => {
+                return (
+                  <tr key={battery._id}>
+                    <td id="_id">{battery._id}</td>
+                    <td><FormGroup><Radio name="selectBattery" inline></Radio></FormGroup></td>
+                    <td>{battery.serialNum}</td>
+                    <td>{battery.laptopId}</td>
+                    <td>{(battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100} %</td>
+                    <td>
+                      {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                    </td>
+                    <td>{this.formatDate(battery.log_date)}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
         </div>
+
+      <div className="TableButtons">
+        <Button bsStyle="danger" bsSize="small" onClick={this.deleteBattery()}>Delete Battery</Button>
+        <Button bsStyle="primary" bsSize="small" onClick={this.generateReport()}>Diagnostics Report</Button>
+      </div>
 
       </div>
     );
