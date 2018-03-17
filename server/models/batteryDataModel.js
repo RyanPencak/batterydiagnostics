@@ -35,7 +35,7 @@ var BatteryDataSchema = new Schema({
     default: false
   },
   log_date: {
-    type: String,
+    type: Date,
     default: Date.now()
   }
 });
