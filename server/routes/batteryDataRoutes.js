@@ -3,6 +3,20 @@ const batteryData = require('../controllers/batteryDataController');
 const mongoose = require('mongoose');
 const Battery = mongoose.model('batteryData');
 
+// NEW GET
+router.get('/', batteryData.list_all_batteries);
+
+// NEW POST
+router.post('/', batteryData.create_battery);
+
+// NEW GET BY ID
+router.get('/:batteryId', batteryData.read_battery);
+
+// NEW DELETE
+router.delete('/:batteryId', batteryData.delete_battery);
+
+module.exports = router;
+
 // WORKING GET
 // router.get('/', (req, res, next) => {
 //   Battery.find({}, function(err, battery) {
@@ -36,21 +50,6 @@ const Battery = mongoose.model('batteryData');
 //     res.json({message: 'Battery Deleted'});
 //   });
 // })
-
-// NEW GET
-router.get('/', batteryData.list_all_batteries);
-
-// NEW POST
-router.post('/', batteryData.create_battery);
-
-// NEW GET BY ID
-router.get('/:batteryId', batteryData.read_battery);
-
-// NEW DELETE
-router.delete('/:batteryId', batteryData.delete_battery);
-
-
-module.exports = router;
 
 
 // var batteryData = require('../controllers/batteryDataController');

@@ -60,6 +60,10 @@ app.use((err, _req, res, _next) => {
 });
 
 
+
+
+
+
 // HTTP Get Request
 
 const get_url = "https://batterydiagnostics.herokuapp.com/api/battery";

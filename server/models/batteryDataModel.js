@@ -35,9 +35,24 @@ var BatteryDataSchema = new Schema({
     default: false
   },
   log_date: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: Date.now()
   }
 });
+
+// function formatDate(date) {
+//   var monthNames = [
+//     "January", "February", "March",
+//     "April", "May", "June", "July",
+//     "August", "September", "October",
+//     "November", "December"
+//   ];
+//
+//   var day = date.getDate();
+//   var monthIndex = date.getMonth();
+//   var year = date.getFullYear();
+//
+//   return day + ' ' + monthNames[monthIndex] + ' ' + year;
+// }
 
 module.exports = mongoose.model('batteryData', BatteryDataSchema);
