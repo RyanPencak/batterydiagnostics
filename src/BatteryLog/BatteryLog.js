@@ -2,6 +2,7 @@ import './BatteryLog.css';
 import React, { Component } from 'react';
 import { Table, Button, Glyphicon } from 'react-bootstrap';
 import DeleteBatteryModal from '../DeleteBatteryModal/DeleteBatteryModal.js';
+import Report from '../Report/Report.js';
 import axios from 'axios';
 
 export default class BatteryLog extends Component {
@@ -12,13 +13,22 @@ export default class BatteryLog extends Component {
     this.state = {
       batteryData: [],
       deleteBatteryModalOpen: false,
-      selectedBatteryId: ''
+      reportSectionDisplayed: false,
+      selectedBatteryId: '',
+      selectedSerialNumber: '',
+      selectedLaptopId: 0,
+      selectedRatedCapacity: 0,
+      selectedMeasuredCapacity: [],
+      selectedDischargingVoltage: [],
+      selectedDischargingCurrent: [],
+      selectedDischargingCapacity: []
     };
 
     this.getBatteryData = this.getBatteryData.bind(this);
+    this.getBatteryDataById = this.getBatteryDataById.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.toggleDeleteBatteryModal = this.toggleDeleteBatteryModal.bind(this);
-    this.generateReport = this.generateReport.bind(this);
+    this.toggleBatteryReport = this.toggleBatteryReport.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +39,25 @@ export default class BatteryLog extends Component {
     axios.get('/api/battery')
       .then(({data}) => {
         this.setState({batteryData: data});
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  getBatteryDataById(batteryId) {
+    axios.get('/api/battery/' + batteryId)
+      .then(({data}) => {
+        this.setState({
+          selectedSerialNumber: data.serialNum,
+          selectedLaptopId: data.laptopId,
+          selectedRatedCapacity: data.rCap,
+          selectedMeasuredCapacity: data.mCap,
+          selectedDischargingVoltage: data.dcVol,
+          selectedDischargingCurrent: data.dcCur,
+          selectedDischargingCapacity: data.dcCap
+        });
+        // console.log(this.state);
       })
       .catch(err => {
         console.log(err);
@@ -57,8 +86,19 @@ export default class BatteryLog extends Component {
     });
   }
 
-  generateReport(batteryId) {
-    console.log(batteryId);
+  toggleBatteryReport(batteryId) {
+    if(batteryId === this.state.selectedBatteryId) {
+      this.setState({
+        reportSectionDisplayed: !this.state.reportSectionDisplayed
+      })
+    }
+    else {
+      this.getBatteryDataById(batteryId);
+      this.setState({
+        reportSectionDisplayed: true,
+        selectedBatteryId: batteryId
+      });
+    }
   }
 
   render() {
@@ -101,7 +141,7 @@ export default class BatteryLog extends Component {
                       <Button bsStyle="danger" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
                     </td>
                     <td className="center">
-                      <Button bsStyle="primary" bsSize="small" onClick={() => {this.generateReport(battery._id)}}><Glyphicon glyph="tasks" /></Button>
+                      <Button bsStyle="primary" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button>
                     </td>
                   </tr>
                 )
@@ -117,6 +157,21 @@ export default class BatteryLog extends Component {
             selectedBatteryId={this.state.selectedBatteryId}
             toggleDeleteBatteryModal={this.toggleDeleteBatteryModal}
             getBatteryData={this.getBatteryData}
+          />
+          : null
+        }
+
+        {
+          this.state.reportSectionDisplayed
+          ?
+          <Report
+            serialNum={this.state.selectedSerialNumber}
+            laptopId={this.state.selectedLaptopId}
+            rCap={this.state.selectedRatedCapacity}
+            mCap={this.state.selectedMeasuredCapacity}
+            dcVol={this.state.selectedDischargingVoltage}
+            dcCur={this.state.selectedDischargingCurrent}
+            dcCap={this.state.selectedDischargingCapacity}
           />
           : null
         }
