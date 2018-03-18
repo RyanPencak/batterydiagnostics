@@ -21,7 +21,8 @@ export default class BatteryLog extends Component {
       selectedMeasuredCapacity: [],
       selectedDischargingVoltage: [],
       selectedDischargingCurrent: [],
-      selectedDischargingCapacity: []
+      selectedDischargingCapacity: [],
+      selectedIsWindows: false
     };
 
     this.getBatteryData = this.getBatteryData.bind(this);
@@ -55,7 +56,8 @@ export default class BatteryLog extends Component {
           selectedMeasuredCapacity: data.mCap,
           selectedDischargingVoltage: data.dcVol,
           selectedDischargingCurrent: data.dcCur,
-          selectedDischargingCapacity: data.dcCap
+          selectedDischargingCapacity: data.dcCap,
+          selectedIsWindows: data.is_windows
         });
         // console.log(this.state);
       })
@@ -173,6 +175,7 @@ export default class BatteryLog extends Component {
             dcVol={this.state.selectedDischargingVoltage}
             dcCur={this.state.selectedDischargingCurrent}
             dcCap={this.state.selectedDischargingCapacity}
+            isWindows={this.state.selectedIsWindows}
           />
           : null
         }

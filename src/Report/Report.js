@@ -21,8 +21,20 @@ export default function Report(props) {
             <div className="batterySpecs">
               <h4>Serial Number: {batteryData.serialNum}</h4>
               <h4>Laptop ID: {batteryData.laptopId}</h4>
-              <h4>Manufacturer Rated Maximum Capacity: {batteryData.rCap} mAh</h4>
-              <h4>Immediate Maximum Capacity: {batteryData.mCap[batteryData.mCap.length-1]} mAh</h4>
+              {
+                props.isWindows
+                ?
+                <h4>Manufacturer Rated Maximum Capacity: {batteryData.rCap} mWh</h4>
+                :
+                <h4>Manufacturer Rated Maximum Capacity: {batteryData.rCap} mAh</h4>
+              }
+              {
+                props.isWindows
+                ?
+                <h4>Immediate Maximum Capacity: {batteryData.mCap[batteryData.mCap.length-1]} mWh</h4>
+                :
+                <h4>Immediate Maximum Capacity: {batteryData.mCap[batteryData.mCap.length-1]} mAh</h4>
+              }
             </div>
           </Col>
           <Col xs={12} md={4}>
