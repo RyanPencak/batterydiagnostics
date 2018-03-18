@@ -27,7 +27,7 @@ export default function Report(props) {
           </Col>
           <Col xs={12} md={4}>
             <div className="batteryCapacity">
-              <CircularProgressbar initialAnimation={true} percentage={(batteryData.mCap[batteryData.mCap.length - 1] / batteryData.rCap) * 100} />
+              <CircularProgressbar initialAnimation={true} percentage={((batteryData.mCap[batteryData.mCap.length - 1] / batteryData.rCap) * 100).toFixed(2)} />
             </div>
           </Col>
         </Row>
