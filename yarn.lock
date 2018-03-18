@@ -5847,6 +5847,12 @@ react-bootstrap@^0.32.1:
     uncontrollable "^4.1.0"
     warning "^3.0.0"
 
+react-circular-progressbar@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-circular-progressbar/-/react-circular-progressbar-0.8.0.tgz#19a0103669fc1b6168dface2024de267857f868f"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-d3-basic@^1.6.11:
   version "1.6.11"
   resolved "https://registry.yarnpkg.com/react-d3-basic/-/react-d3-basic-1.6.11.tgz#6e0359434588e8da01294823ab8c0343aee5aa68"
