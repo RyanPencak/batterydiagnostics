@@ -82,6 +82,7 @@ export default class BatteryLog extends Component {
   toggleDeleteBatteryModal(batteryId) {
     this.setState({
       deleteBatteryModalOpen: !this.state.deleteBatteryModalOpen,
+      reportSectionDisplayed: false,
       selectedBatteryId: batteryId
     });
   }
