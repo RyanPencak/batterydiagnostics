@@ -1,8 +1,7 @@
 import './BatteryLog.css';
 import React, { Component } from 'react';
-// import ReactTable from 'react-table';
-// import 'react-table/react-table.css';
 import { Table, Button, Glyphicon } from 'react-bootstrap';
+import DeleteBatteryModal from '../DeleteBatteryModal/DeleteBatteryModal.js';
 import axios from 'axios';
 
 export default class BatteryLog extends Component {
@@ -12,11 +11,13 @@ export default class BatteryLog extends Component {
 
     this.state = {
       batteryData: [],
+      deleteBatteryModalOpen: false,
+      selectedBatteryId: ''
     };
 
     this.getBatteryData = this.getBatteryData.bind(this);
     this.formatDate = this.formatDate.bind(this);
-    this.deleteBattery = this.deleteBattery.bind(this);
+    this.toggleDeleteBatteryModal = this.toggleDeleteBatteryModal.bind(this);
     this.generateReport = this.generateReport.bind(this);
   }
 
@@ -40,23 +41,20 @@ export default class BatteryLog extends Component {
     var month = d.charAt(5) + d.charAt(6);
     var year = d.charAt(0) + d.charAt(1) + d.charAt(2) + d.charAt(3);
     var hour = d.charAt(11) + d.charAt(12);
-    var hour_temp = parseInt(hour, 10);
-    hour_temp = hour_temp - 5;
-    hour = hour_temp.toString();
+    // var hour_temp = parseInt(hour, 10);
+    // hour_temp = hour_temp - 5;
+    // hour = hour_temp.toString();
     var minute = d.charAt(14) + d.charAt(15);
     var second = d.charAt(17) + d.charAt(18);
 
     return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
   }
 
-  deleteBattery(batteryId) {
-    axios.delete('/api/battery/' + batteryId)
-      .then(() => {
-        this.getBatteryData();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  toggleDeleteBatteryModal(batteryId) {
+    this.setState({
+      deleteBatteryModalOpen: !this.state.deleteBatteryModalOpen,
+      selectedBatteryId: batteryId
+    });
   }
 
   generateReport(batteryId) {
@@ -66,9 +64,9 @@ export default class BatteryLog extends Component {
   render() {
 
     return (
-      <div className="container">
+      <div className="BatteryLog">
 
-        <div className="batteryLog">
+        <div className="header">
           <h2>Battery Log</h2>
         </div>
 
@@ -82,8 +80,8 @@ export default class BatteryLog extends Component {
                 <th>% Capacity</th>
                 <th>Battery Quality</th>
                 <th>Log Date</th>
-                <th></th>
-                <th></th>
+                <th>Delete</th>
+                <th>Generate Report</th>
               </tr>
             </thead>
             <tbody>
@@ -100,10 +98,10 @@ export default class BatteryLog extends Component {
                     </td>
                     <td>{this.formatDate(battery.log_date)}</td>
                     <td className="center">
-                      <Button bsStyle="danger" bsSize="small" onClick={() => {this.deleteBattery(battery._id)}}>Delete</Button>
+                      <Button bsStyle="danger" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
                     </td>
                     <td className="center">
-                      <Button bsStyle="primary" bsSize="small" onClick={() => {this.generateReport(battery._id)}}>Diagnostics</Button>
+                      <Button bsStyle="primary" bsSize="small" onClick={() => {this.generateReport(battery._id)}}><Glyphicon glyph="tasks" /></Button>
                     </td>
                   </tr>
                 )
@@ -111,11 +109,17 @@ export default class BatteryLog extends Component {
             </tbody>
           </Table>
         </div>
-{/*
-      <div className="TableButtons">
-        <Button bsStyle="danger" bsSize="small" onClick={this.deleteBattery()}>Delete Battery</Button>
-        <Button bsStyle="primary" bsSize="small" onClick={this.generateReport()}>Diagnostics Report</Button>
-      </div> */}
+
+        {
+          this.state.deleteBatteryModalOpen
+          ?
+          <DeleteBatteryModal
+            selectedBatteryId={this.state.selectedBatteryId}
+            toggleDeleteBatteryModal={this.toggleDeleteBatteryModal}
+            getBatteryData={this.getBatteryData}
+          />
+          : null
+        }
 
       </div>
     );
