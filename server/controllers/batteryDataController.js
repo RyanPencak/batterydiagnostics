@@ -18,7 +18,7 @@ exports.list_all_batteries = function(req, res) {
 
 exports.create_battery = function(req, res) {
   var query = { serialNum: req.body.serialNum };
-  var update = { "cycles": req.body.cycles, "log_date": Date.now() };
+  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "log_date": Date.now() };
   var options = { new: true, runValidators: true };
   Battery.findOneAndUpdate(query, update, options, function(err, battery) {
     if (err) {

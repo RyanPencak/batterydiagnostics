@@ -133,7 +133,7 @@ export default class BatteryLog extends Component {
                     {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
                     <td>{battery.serialNum}</td>
                     <td>{battery.laptopId}</td>
-                    <td>{(battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100} %</td>
+                    <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
                     <td>
                       {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
                     </td>

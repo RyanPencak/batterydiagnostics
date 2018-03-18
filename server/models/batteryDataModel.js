@@ -34,6 +34,10 @@ var BatteryDataSchema = new Schema({
     type: Boolean,
     default: false
   },
+  is_windows: {
+    type: Boolean,
+    default: false
+  },
   log_date: {
     type: Date,
     default: Date.now()
