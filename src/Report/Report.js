@@ -12,7 +12,7 @@ export default function Report(props) {
   return (
     <div className="Report">
 
-      <h2>Battery Report</h2>
+      <h1>Battery Report</h1>
 
       <Grid>
 

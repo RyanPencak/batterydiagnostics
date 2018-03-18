@@ -1,6 +1,6 @@
 import './BatteryLog.css';
 import React, { Component } from 'react';
-import { Table, Button, Glyphicon } from 'react-bootstrap';
+import { Table, Button, Glyphicon, MenuItem, FormGroup, InputGroup, DropdownButton } from 'react-bootstrap';
 import DeleteBatteryModal from '../DeleteBatteryModal/DeleteBatteryModal.js';
 import Report from '../Report/Report.js';
 import axios from 'axios';
@@ -12,8 +12,13 @@ export default class BatteryLog extends Component {
 
     this.state = {
       batteryData: [],
+
+      searchTerm: '',
+      searchOnSerial: true,
+
       deleteBatteryModalOpen: false,
       reportSectionDisplayed: false,
+
       selectedBatteryId: '',
       selectedSerialNumber: '',
       selectedLaptopId: 0,
@@ -27,9 +32,14 @@ export default class BatteryLog extends Component {
 
     this.getBatteryData = this.getBatteryData.bind(this);
     this.getBatteryDataById = this.getBatteryDataById.bind(this);
-    this.formatDate = this.formatDate.bind(this);
     this.toggleDeleteBatteryModal = this.toggleDeleteBatteryModal.bind(this);
     this.toggleBatteryReport = this.toggleBatteryReport.bind(this);
+    this.onSearchTermChange = this.onSearchTermChange.bind(this);
+    this.searchBySerial = this.searchBySerial.bind(this);
+    this.searchByLaptop = this.searchByLaptop.bind(this);
+    this.isSearched = this.isSearched.bind(this);
+    this.formatDate = this.formatDate.bind(this);
+    this.changePlaceholder = this.changePlaceholder.bind(this);
   }
 
   componentDidMount() {
@@ -66,27 +76,41 @@ export default class BatteryLog extends Component {
       });
   }
 
-  formatDate(date) {
-    var d = date.toString();
-    var day = d.charAt(8) + d.charAt(9);
-    var month = d.charAt(5) + d.charAt(6);
-    var year = d.charAt(0) + d.charAt(1) + d.charAt(2) + d.charAt(3);
-    var hour = d.charAt(11) + d.charAt(12);
-    // var hour_temp = parseInt(hour, 10);
-    // hour_temp = hour_temp - 5;
-    // hour = hour_temp.toString();
-    var minute = d.charAt(14) + d.charAt(15);
-    var second = d.charAt(17) + d.charAt(18);
-
-    return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
-  }
-
   toggleDeleteBatteryModal(batteryId) {
     this.setState({
       deleteBatteryModalOpen: !this.state.deleteBatteryModalOpen,
       reportSectionDisplayed: false,
       selectedBatteryId: batteryId
     });
+  }
+
+  onSearchTermChange(event) {
+    this.setState({
+      searchTerm: event.target.value
+    });
+  }
+
+  isSearched(battery) {
+    const newSearchTerm = this.state.searchTerm.toLowerCase();
+
+    if (this.state.searchOnSerial) {
+      return battery.serialNum.toLowerCase().includes(newSearchTerm)
+    }
+    else {
+      return battery.laptopId.toLowerCase().includes(newSearchTerm)
+    }
+  }
+
+  searchBySerial() {
+    this.setState({
+      searchOnSerial: true
+    })
+  }
+
+  searchByLaptop() {
+    this.setState({
+      searchOnSerial: false
+    })
   }
 
   toggleBatteryReport(batteryId) {
@@ -104,13 +128,53 @@ export default class BatteryLog extends Component {
     }
   }
 
+  formatDate(date) {
+    var d = date.toString();
+    var day = d.charAt(8) + d.charAt(9);
+    var month = d.charAt(5) + d.charAt(6);
+    var year = d.charAt(0) + d.charAt(1) + d.charAt(2) + d.charAt(3);
+    var hour = d.charAt(11) + d.charAt(12);
+    // var hour_temp = parseInt(hour, 10);
+    // hour_temp = hour_temp - 5;
+    // hour = hour_temp.toString();
+    var minute = d.charAt(14) + d.charAt(15);
+    var second = d.charAt(17) + d.charAt(18);
+
+    return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
+  }
+
+  changePlaceholder() {
+    if(this.state.searchOnSerial) {
+      return "Enter a serial number"
+    }
+    else {
+      return "Enter a laptop ID"
+    }
+  }
+
   render() {
 
     return (
       <div className="BatteryLog">
 
         <div className="header">
-          <h2>Battery Log</h2>
+          <h1>Battery Log</h1>
+        </div>
+
+        <div className="searchBar">
+          <input type="search" className="form-control search-form" placeholder={this.changePlaceholder()} onChange={this.onSearchTermChange}/>
+
+          <FormGroup>
+            <InputGroup>
+              <DropdownButton
+                id="search-dropdown"
+                title=""
+              >
+                <MenuItem key="1" onClick={() => {this.searchBySerial()}}>Serial #</MenuItem>
+                <MenuItem key="2" onClick={() => {this.searchByLaptop()}}>Laptop ID</MenuItem>
+              </DropdownButton>
+            </InputGroup>
+          </FormGroup>
         </div>
 
         <div className="bootstrapTable">
@@ -128,7 +192,7 @@ export default class BatteryLog extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.batteryData.map(battery => {
+              {this.state.batteryData.filter(this.isSearched).map(battery => {
                 return (
                   <tr key={battery._id}>
                     <td id="_id">{battery._id}</td>
