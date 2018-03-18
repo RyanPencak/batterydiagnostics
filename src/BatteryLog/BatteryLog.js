@@ -2,7 +2,7 @@ import './BatteryLog.css';
 import React, { Component } from 'react';
 // import ReactTable from 'react-table';
 // import 'react-table/react-table.css';
-import { Table, FormGroup, Radio, Button, Glyphicon } from 'react-bootstrap';
+import { Table, Button, Glyphicon } from 'react-bootstrap';
 import axios from 'axios';
 
 export default class BatteryLog extends Component {
@@ -11,15 +11,27 @@ export default class BatteryLog extends Component {
     super();
 
     this.state = {
-      batteryData: []
+      batteryData: [],
     };
+
+    this.getBatteryData = this.getBatteryData.bind(this);
+    this.formatDate = this.formatDate.bind(this);
+    this.deleteBattery = this.deleteBattery.bind(this);
+    this.generateReport = this.generateReport.bind(this);
   }
 
   componentDidMount() {
+    this.getBatteryData();
+  }
+
+  getBatteryData() {
     axios.get('/api/battery')
-    .then(({data}) => {
-      this.setState({batteryData: data});
-    });
+      .then(({data}) => {
+        this.setState({batteryData: data});
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   formatDate(date) {
@@ -37,34 +49,41 @@ export default class BatteryLog extends Component {
     return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
   }
 
-  generateReport() {
-
+  deleteBattery(batteryId) {
+    axios.delete('/api/battery/' + batteryId)
+      .then(() => {
+        this.getBatteryData();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
-  deleteBattery() {
-
+  generateReport(batteryId) {
+    console.log(batteryId);
   }
 
   render() {
 
     return (
-      <div className="Container">
+      <div className="container">
 
-        <div className="BatteryLog">
+        <div className="batteryLog">
           <h2>Battery Log</h2>
         </div>
 
-        <div className="BootstrapTable">
+        <div className="bootstrapTable">
           <Table striped bordered condensed hover responsive >
             <thead>
               <tr>
                 <th id="_id">Post ID (BatteryId)</th>
-                <th></th>
                 <th>Battery Serial Number</th>
                 <th>Laptop ID</th>
                 <th>% Capacity</th>
                 <th>Battery Quality</th>
                 <th>Log Date</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -72,7 +91,7 @@ export default class BatteryLog extends Component {
                 return (
                   <tr key={battery._id}>
                     <td id="_id">{battery._id}</td>
-                    <td><FormGroup><Radio name="selectBattery" inline></Radio></FormGroup></td>
+                    {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
                     <td>{battery.serialNum}</td>
                     <td>{battery.laptopId}</td>
                     <td>{(battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100} %</td>
@@ -80,17 +99,23 @@ export default class BatteryLog extends Component {
                       {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
                     </td>
                     <td>{this.formatDate(battery.log_date)}</td>
+                    <td className="center">
+                      <Button bsStyle="danger" bsSize="small" onClick={() => {this.deleteBattery(battery._id)}}>Delete</Button>
+                    </td>
+                    <td className="center">
+                      <Button bsStyle="primary" bsSize="small" onClick={() => {this.generateReport(battery._id)}}>Diagnostics</Button>
+                    </td>
                   </tr>
                 )
               })}
             </tbody>
           </Table>
         </div>
-
+{/*
       <div className="TableButtons">
         <Button bsStyle="danger" bsSize="small" onClick={this.deleteBattery()}>Delete Battery</Button>
         <Button bsStyle="primary" bsSize="small" onClick={this.generateReport()}>Diagnostics Report</Button>
-      </div>
+      </div> */}
 
       </div>
     );
