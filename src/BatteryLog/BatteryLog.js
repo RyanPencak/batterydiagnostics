@@ -13,6 +13,8 @@ export default class BatteryLog extends Component {
     this.state = {
       batteryData: [],
 
+      dataLength: 0,
+
       searchTerm: '',
       searchOnSerial: true,
 
@@ -34,7 +36,9 @@ export default class BatteryLog extends Component {
       selectedIsWindows: false
     };
 
+    this.sendEmail = this.sendEmail.bind(this);
     this.getBatteryData = this.getBatteryData.bind(this);
+    this.getInitialBatteryData = this.getInitialBatteryData.bind(this);
     this.getBatteryDataById = this.getBatteryDataById.bind(this);
     this.toggleDeleteBatteryModal = this.toggleDeleteBatteryModal.bind(this);
     this.toggleBatteryReport = this.toggleBatteryReport.bind(this);
@@ -51,13 +55,41 @@ export default class BatteryLog extends Component {
   }
 
   componentDidMount() {
+    this.getInitialBatteryData();
+  }
+
+  componentDidUpdate() {
     this.getBatteryData();
+    if((this.state.batteryData.length > this.state.dataLength) && (this.state.dataLength !== 0)) {
+      this.sendEmail(this.state.batteryData[0]);
+      this.setState({dataLength: this.state.batteryData.length});
+    }
+  }
+
+  sendEmail(battery) {
+    // create new route to post and get information to send in email
+    axios.post('/api/email', battery);
+  }
+
+  getInitialBatteryData() {
+    axios.get('/api/battery')
+      .then(({data}) => {
+        this.setState({
+          batteryData: data,
+          dataLength: data.length
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   getBatteryData() {
     axios.get('/api/battery')
       .then(({data}) => {
-        this.setState({batteryData: data});
+        this.setState({
+          batteryData: data
+        });
       })
       .catch(err => {
         console.log(err);
