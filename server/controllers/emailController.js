@@ -18,7 +18,6 @@ exports.send_email = function(req, res) {
 
   // function to send battery report
   function sendReport(email_contents) {
-    console.log("in send report");
     // set email data
     var mailOptions = {
         from: '"Battery Diagnostics Server" <BatteryDiagnosticServer@gmail.com>', // sender address
@@ -55,17 +54,14 @@ exports.send_email = function(req, res) {
   //   });
 
   const battery = req.body;
-  console.log(battery);
-  sendReport(JSON.stringify(battery));
 
   if(! battery.is_software)
   {
-    sendReport(battery);
+    sendReport(JSON.stringify(battery));
   }
-  else if((battery.measured_capacity/battery.rated_capacity) < 0.40)
+  else if((battery.mCap[battery.mCap.length - 1] / battery.rCap) < 0.40)
   {
-    console.log("sending software report");
-    sendReport(battery);
+    sendReport(JSON.stringify(battery));
   }
 
 };

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Battery = mongoose.model('batteryData');
 
+// GET Function
 exports.list_all_batteries = function(req, res) {
   Battery.find({}, null, {sort: {log_date: 'descending'}}, function(err, battery) {
     if (err) {
@@ -16,9 +17,10 @@ exports.list_all_batteries = function(req, res) {
   // });
 };
 
+// POST Function
 exports.create_battery = function(req, res) {
   var query = { serialNum: req.body.serialNum };
-  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "log_date": Date.now() };
+  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "isUpdated": true, "log_date": Date.now() };
   var options = { new: true, runValidators: true };
   Battery.findOneAndUpdate(query, update, options, function(err, battery) {
     if (err) {
@@ -29,8 +31,11 @@ exports.create_battery = function(req, res) {
 
       if(!battery) {
         var battery = new Battery(req.body);
+        battery.log_date = Date.now();
       }
       else {
+        // battery["isUpdated"] = true;
+
         if(req.body.dcVol != null) {
           battery.dcCap = req.body.dcCap;
         }
@@ -43,12 +48,14 @@ exports.create_battery = function(req, res) {
         battery.mCap.push(req.body.mCap);
       }
 
+
       battery.save(function(err, bat) {
         if (err)
           res.send(err);
 
         res.json(bat);
       });
+
     }
   });
 };
@@ -61,10 +68,21 @@ exports.read_battery = function(req, res) {
   });
 };
 
+// Basic update battery
 exports.update_battery = function(req, res) {
   Battery.findOneAndUpdate({_id: req.params.batteryId}, req.body, {new: true}, function(err, battery) {
     if (err)
       res.send(err);
+    res.json(battery);
+  });
+};
+
+// return updates to false
+exports.reset_updates = function(req, res) {
+  Battery.findOneAndUpdate({ isUpdated: true }, { "isUpdated": false }, function(err, battery) {
+    if (err) {
+      res.send(err);
+    }
     res.json(battery);
   });
 };

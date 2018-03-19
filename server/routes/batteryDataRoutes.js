@@ -12,6 +12,9 @@ router.post('/', batteryData.create_battery);
 // NEW GET BY ID
 router.get('/:batteryId', batteryData.read_battery);
 
+// PATCH
+router.patch('/:batteryId', batteryData.reset_updates);
+
 // NEW DELETE
 router.delete('/:batteryId', batteryData.delete_battery);
 

@@ -12,6 +12,8 @@ export default class BatteryLog extends Component {
 
     this.state = {
       batteryData: [],
+      isUpdated: false,
+      // initializedUpdate: false,
 
       dataLength: 0,
 
@@ -59,10 +61,22 @@ export default class BatteryLog extends Component {
   }
 
   componentDidUpdate() {
-    this.getBatteryData();
-    if((this.state.batteryData.length > this.state.dataLength) && (this.state.dataLength !== 0)) {
-      this.sendEmail(this.state.batteryData[0]);
-      this.setState({dataLength: this.state.batteryData.length});
+    if(this.state.dataLength !== 0) {
+      this.getBatteryData();
+      if(this.state.batteryData.length > this.state.dataLength) {
+        this.setState({dataLength: this.state.batteryData.length});
+        this.sendEmail(this.state.batteryData[0]);
+      }
+      else if (this.state.isUpdated === true) {
+        axios.patch('/api/battery/' + this.state.batteryData[0]._id)
+          .then(() => {
+            this.sendEmail(this.state.batteryData[0]);
+            this.setState({isUpdated: false});
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
   }
 
@@ -85,15 +99,24 @@ export default class BatteryLog extends Component {
   }
 
   getBatteryData() {
-    axios.get('/api/battery')
+    if(! this.state.isUpdated) {
+      axios.get('/api/battery')
       .then(({data}) => {
         this.setState({
-          batteryData: data
+          batteryData: data,
+          isUpdated: data[0].isUpdated
         });
+        // if(this.state.isUpdated) {
+        //   this.setState({
+        //     initializedUpdate: true
+        //   });
+        // }
+        // console.log(this.state.isUpdated);
       })
       .catch(err => {
         console.log(err);
       });
+    }
   }
 
   getBatteryDataById(batteryId) {

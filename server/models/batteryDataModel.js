@@ -38,6 +38,10 @@ var BatteryDataSchema = new Schema({
     type: Boolean,
     default: false
   },
+  isUpdated: {
+    type: Boolean,
+    default: false
+  },
   log_date: {
     type: Date,
     default: Date.now()
