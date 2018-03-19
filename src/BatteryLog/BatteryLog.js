@@ -1,6 +1,6 @@
 import './BatteryLog.css';
 import React, { Component } from 'react';
-import { Table, Button, Glyphicon, MenuItem, FormGroup, InputGroup, DropdownButton } from 'react-bootstrap';
+import { Table, Button, Glyphicon, MenuItem, FormGroup, InputGroup, DropdownButton, Pagination } from 'react-bootstrap';
 import DeleteBatteryModal from '../DeleteBatteryModal/DeleteBatteryModal.js';
 import Report from '../Report/Report.js';
 import axios from 'axios';
@@ -15,6 +15,10 @@ export default class BatteryLog extends Component {
 
       searchTerm: '',
       searchOnSerial: true,
+
+      pageCounter: 1,
+      firstRow: 0,
+      lastRow: 9,
 
       deleteBatteryModalOpen: false,
       reportSectionDisplayed: false,
@@ -40,6 +44,10 @@ export default class BatteryLog extends Component {
     this.isSearched = this.isSearched.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.changePlaceholder = this.changePlaceholder.bind(this);
+    this.incrementPage = this.incrementPage.bind(this);
+    this.decrementPage = this.decrementPage.bind(this);
+    this.firstPage = this.firstPage.bind(this);
+    this.lastPage = this.lastPage.bind(this);
   }
 
   componentDidMount() {
@@ -152,6 +160,62 @@ export default class BatteryLog extends Component {
     }
   }
 
+  incrementPage() {
+
+    let currentPage = this.state.pageCounter;
+    if (currentPage < (Math.ceil(this.state.batteryData.length / 10))) {
+      currentPage += 1;
+    }
+
+    this.setState({
+      pageCounter: currentPage,
+      firstRow: (10*currentPage) - 10,
+      lastRow: (10*currentPage) - 1
+    })
+  }
+
+  decrementPage() {
+    let currentPage = this.state.pageCounter;
+    if (currentPage > 1) {
+      currentPage -= 1;
+    }
+
+    this.setState({
+      pageCounter: currentPage,
+      firstRow: (10*currentPage) - 10,
+      lastRow: (10*currentPage) - 1
+    })
+  }
+
+  firstPage() {
+    this.setState({
+      pageCounter: 1,
+      firstRow: 0,
+      lastRow: 9
+    })
+  }
+
+  lastPage() {
+
+    let currentPage = Math.ceil(this.state.batteryData.length / 10);
+    let endRow = this.state.batteryData.length;
+    endRow -= 1;
+    let startRow = 0;
+
+    if ((currentPage % 10) === 0) {
+      startRow = endRow - 10;
+    }
+    else {
+      startRow = endRow - (currentPage % 10);
+    }
+
+    this.setState({
+      pageCounter: currentPage,
+      firstRow: startRow,
+      lastRow: endRow
+    })
+  }
+
   render() {
 
     return (
@@ -192,29 +256,39 @@ export default class BatteryLog extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.batteryData.filter(this.isSearched).map(battery => {
-                return (
-                  <tr key={battery._id}>
-                    <td id="_id">{battery._id}</td>
-                    {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
-                    <td>{battery.serialNum}</td>
-                    <td>{battery.laptopId}</td>
-                    <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
-                    <td>
-                      {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
-                    </td>
-                    <td>{this.formatDate(battery.log_date)}</td>
-                    <td className="center">
-                      <Button bsStyle="danger" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
-                    </td>
-                    <td className="center">
-                      <Button bsStyle="primary" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button>
-                    </td>
-                  </tr>
-                )
+              {this.state.batteryData.filter(this.isSearched).map((battery,index) => {
+                if (index >= this.state.firstRow && index <= this.state.lastRow) {
+                  return (
+                    <tr key={battery._id}>
+                      <td id="_id">{battery._id}</td>
+                      {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
+                      <td>{battery.serialNum}</td>
+                      <td>{battery.laptopId}</td>
+                      <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
+                      <td>
+                        {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                      </td>
+                      <td>{this.formatDate(battery.log_date)}</td>
+                      <td className="center">
+                        <Button bsStyle="danger" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
+                      </td>
+                      <td className="center">
+                        <Button bsStyle="primary" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button>
+                      </td>
+                    </tr>
+                  )
+                }
+                else return null
               })}
             </tbody>
           </Table>
+
+          <Pagination>
+            <Pagination.First onClick={() => {this.firstPage()}} />
+            <Pagination.Prev onClick={() => {this.decrementPage()}} />
+            <Pagination.Next onClick={() => {this.incrementPage()}} />
+            <Pagination.Last onClick={() => {this.lastPage()}} />
+          </Pagination>
         </div>
 
         {
