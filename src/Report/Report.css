@@ -6,3 +6,19 @@
   display: flex;
   flex-direction: column;
 }
+
+.progressbar-red .CircularProgressbar-path {
+  stroke: red !important;
+}
+
+.progressbar-red .CircularProgressbar-text {
+  fill: red !important;
+}
+
+.progressbar-green .CircularProgressbar-path {
+  stroke: green !important;
+}
+
+.progressbar-green .CircularProgressbar-text {
+  fill: green !important;
+}
