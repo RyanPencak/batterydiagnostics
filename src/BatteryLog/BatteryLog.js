@@ -12,6 +12,8 @@ export default class BatteryLog extends Component {
 
     this.state = {
       batteryData: [],
+      capPlotData: [],
+      dcPlotData: [],
       isUpdated: false,
       // initializedUpdate: false,
 
@@ -54,6 +56,8 @@ export default class BatteryLog extends Component {
     this.decrementPage = this.decrementPage.bind(this);
     this.firstPage = this.firstPage.bind(this);
     this.lastPage = this.lastPage.bind(this);
+    this.getCapPlotData = this.getCapPlotData.bind(this);
+    this.getDischargingPlotData = this.getDischargingPlotData.bind(this);
   }
 
   componentDidMount() {
@@ -131,7 +135,9 @@ export default class BatteryLog extends Component {
           selectedDischargingCurrent: data.dcCur,
           selectedDischargingCapacity: data.dcCap,
           selectedIsWindows: data.is_windows
-        });
+        },
+        this.getCapPlotData
+      );
         // console.log(this.state);
       })
       .catch(err => {
@@ -176,6 +182,37 @@ export default class BatteryLog extends Component {
     })
   }
 
+  getCapPlotData() {
+    this.getDischargingPlotData();
+    let capData = [];
+
+    for (let i = 0; i < this.state.selectedMeasuredCapacity.length; i++) {
+      capData.push(
+        {
+          test_number: `Test ${i+1}`,
+          measured_capacity: this.state.selectedMeasuredCapacity[i],
+          rated_capacity: this.state.selectedRatedCapacity
+        }
+      );
+    }
+    this.setState({ capPlotData: capData });
+  }
+
+  getDischargingPlotData() {
+    let dcData = [];
+
+    for (let i = 0; i < this.state.selectedDischargingVoltage.length; i++) {
+      dcData.push(
+        {
+          discharging_voltage: this.state.selectedDischargingVoltage[i],
+          discharging_current: this.state.selectedDischargingCurrent[i],
+          discharging_capacity: this.state.selectedDischargingCapacity[i]
+        }
+      );
+    }
+    this.setState({ dcPlotData: dcData });
+  }
+
   toggleBatteryReport(batteryId) {
     if(batteryId === this.state.selectedBatteryId) {
       this.setState({
@@ -187,7 +224,8 @@ export default class BatteryLog extends Component {
       this.setState({
         reportSectionDisplayed: true,
         selectedBatteryId: batteryId
-      });
+      }
+    );
     }
   }
 
@@ -328,7 +366,7 @@ export default class BatteryLog extends Component {
                         <Button bsStyle="danger" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
                       </td>
                       <td className="center">
-                        <Button bsStyle="primary" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button>
+                        <a href="#dropLocation"><Button bsStyle="primary" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
                       </td>
                     </tr>
                   )
@@ -369,6 +407,8 @@ export default class BatteryLog extends Component {
             dcCur={this.state.selectedDischargingCurrent}
             dcCap={this.state.selectedDischargingCapacity}
             isWindows={this.state.selectedIsWindows}
+            capPlotData={this.state.capPlotData}
+            dcPlotData={this.state.dcPlotData}
           />
           : null
         }
