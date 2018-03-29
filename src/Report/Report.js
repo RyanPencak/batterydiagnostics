@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Label, LabelList } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label, LabelList } from 'recharts';
 
 export default class Report extends Component {
 
@@ -115,7 +115,7 @@ export default class Report extends Component {
                 <YAxis yAxisId="current" orientation="right" domain={["auto", "auto"]}>
                   <Label value="Current (mA)" angle={-90} position="insideRight" />
                 </YAxis>
-                {/* <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} /> */}
+                <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} />
                 <Legend verticalAlign="middle" layout="vertical" align="right" iconSize={26} height={36}/>
               </LineChart>
               : null
