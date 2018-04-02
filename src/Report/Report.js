@@ -104,7 +104,7 @@ export default class Report extends Component {
           </Row>
           <Row>
             {
-              this.props.dcPlotData.length >= 0
+              this.props.dcPlotData.length > 0
               ?
               <div className="dischargingPlot">
                 <h3>Discharging Curves</h3>
