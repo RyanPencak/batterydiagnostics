@@ -15,9 +15,10 @@ export default class BatteryLog extends Component {
       capPlotData: [],
       dcPlotData: [],
       isUpdated: false,
-      // initializedUpdate: false,
 
       dataLength: 0,
+
+      isSortedByCapacity: false,
 
       searchTerm: '',
       searchOnSerial: true,
@@ -40,28 +41,33 @@ export default class BatteryLog extends Component {
       selectedIsWindows: false
     };
 
-    this.sendEmail = this.sendEmail.bind(this);
-    this.getBatteryData = this.getBatteryData.bind(this);
     this.getInitialBatteryData = this.getInitialBatteryData.bind(this);
+    this.getBatteryData = this.getBatteryData.bind(this);
     this.getBatteryDataById = this.getBatteryDataById.bind(this);
-    this.toggleDeleteBatteryModal = this.toggleDeleteBatteryModal.bind(this);
+    this.getCapPlotData = this.getCapPlotData.bind(this);
+    this.getDischargingPlotData = this.getDischargingPlotData.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+    this.sendEmail = this.sendEmail.bind(this);
     this.toggleBatteryReport = this.toggleBatteryReport.bind(this);
+    this.disableBatteryReport = this.disableBatteryReport.bind(this);
+    this.formatDate = this.formatDate.bind(this);
+    this.toggleDeleteBatteryModal = this.toggleDeleteBatteryModal.bind(this);
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
+    this.changePlaceholder = this.changePlaceholder.bind(this);
+    this.isSearched = this.isSearched.bind(this);
     this.searchBySerial = this.searchBySerial.bind(this);
     this.searchByLaptop = this.searchByLaptop.bind(this);
-    this.isSearched = this.isSearched.bind(this);
-    this.formatDate = this.formatDate.bind(this);
-    this.changePlaceholder = this.changePlaceholder.bind(this);
+    this.sortByDate = this.sortByDate.bind(this);
+    this.sortByCapacity = this.sortByCapacity.bind(this);
     this.incrementPage = this.incrementPage.bind(this);
     this.decrementPage = this.decrementPage.bind(this);
     this.firstPage = this.firstPage.bind(this);
     this.lastPage = this.lastPage.bind(this);
-    this.getCapPlotData = this.getCapPlotData.bind(this);
-    this.getDischargingPlotData = this.getDischargingPlotData.bind(this);
   }
 
   componentDidMount() {
     this.getInitialBatteryData();
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   componentDidUpdate() {
@@ -84,22 +90,18 @@ export default class BatteryLog extends Component {
     }
   }
 
-  sendEmail(battery) {
-    // create new route to post and get information to send in email
-    axios.post('/api/email', battery);
-  }
-
   getInitialBatteryData() {
     axios.get('/api/battery')
-      .then(({data}) => {
-        this.setState({
-          batteryData: data,
-          dataLength: data.length
-        });
-      })
-      .catch(err => {
-        console.log(err);
+    .then(({data}) => {
+      this.setState({
+        batteryData: data,
+        dataLength: data.length
       });
+      console.log(data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   getBatteryData() {
@@ -110,12 +112,6 @@ export default class BatteryLog extends Component {
           batteryData: data,
           isUpdated: data[0].isUpdated
         });
-        // if(this.state.isUpdated) {
-        //   this.setState({
-        //     initializedUpdate: true
-        //   });
-        // }
-        // console.log(this.state.isUpdated);
       })
       .catch(err => {
         console.log(err);
@@ -137,49 +133,11 @@ export default class BatteryLog extends Component {
           selectedIsWindows: data.is_windows
         },
         this.getCapPlotData
-      );
-        // console.log(this.state);
+        );
       })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  toggleDeleteBatteryModal(batteryId) {
-    this.setState({
-      deleteBatteryModalOpen: !this.state.deleteBatteryModalOpen,
-      reportSectionDisplayed: false,
-      selectedBatteryId: batteryId
+    .catch(err => {
+      console.log(err);
     });
-  }
-
-  onSearchTermChange(event) {
-    this.setState({
-      searchTerm: event.target.value
-    });
-  }
-
-  isSearched(battery) {
-    const newSearchTerm = this.state.searchTerm.toLowerCase();
-
-    if (this.state.searchOnSerial) {
-      return battery.serialNum.toLowerCase().includes(newSearchTerm)
-    }
-    else {
-      return battery.laptopId.toLowerCase().includes(newSearchTerm)
-    }
-  }
-
-  searchBySerial() {
-    this.setState({
-      searchOnSerial: true
-    })
-  }
-
-  searchByLaptop() {
-    this.setState({
-      searchOnSerial: false
-    })
   }
 
   getCapPlotData() {
@@ -213,6 +171,18 @@ export default class BatteryLog extends Component {
     this.setState({ dcPlotData: dcData });
   }
 
+  handleScroll() {
+    if (this.state.reportSectionDisplayed && (document.body.scrollTop > 650 || document.documentElement.scrollTop > 650)) {
+      document.getElementById("upBtn").style.display = "block";
+    } else if (this.state.reportSectionDisplayed) {
+      document.getElementById("upBtn").style.display = "none";
+    }
+  }
+
+  sendEmail(battery) {
+    axios.post('/api/email', battery);
+  }
+
   toggleBatteryReport(batteryId) {
     if(batteryId === this.state.selectedBatteryId) {
       this.setState({
@@ -224,9 +194,14 @@ export default class BatteryLog extends Component {
       this.setState({
         reportSectionDisplayed: true,
         selectedBatteryId: batteryId
-      }
-    );
+      });
     }
+  }
+
+  disableBatteryReport() {
+    this.setState({
+      reportSectionDisplayed: false
+    });
   }
 
   formatDate(date) {
@@ -244,13 +219,67 @@ export default class BatteryLog extends Component {
     return month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
   }
 
+  toggleDeleteBatteryModal(batteryId) {
+    this.setState({
+      deleteBatteryModalOpen: !this.state.deleteBatteryModalOpen,
+      reportSectionDisplayed: false,
+      selectedBatteryId: batteryId
+    });
+  }
+
+  onSearchTermChange(event) {
+    this.setState({
+      searchTerm: event.target.value
+    });
+  }
+
   changePlaceholder() {
     if(this.state.searchOnSerial) {
-      return "Enter a serial number"
+      return "Search by Battery Serial Number"
     }
     else {
-      return "Enter a laptop ID"
+      return "Search by Laptop ID"
     }
+  }
+
+  isSearched(battery) {
+    const newSearchTerm = this.state.searchTerm.toLowerCase();
+
+    if (this.state.searchOnSerial) {
+      return battery.serialNum.toLowerCase().includes(newSearchTerm);
+    }
+    else {
+      if(battery.laptopId) {
+        return battery.laptopId.toLowerCase().includes(newSearchTerm);
+      }
+      else {
+        return null;
+      }
+    }
+  }
+
+  searchBySerial() {
+    this.setState({
+      searchOnSerial: true
+    })
+  }
+
+  searchByLaptop() {
+    this.setState({
+      searchOnSerial: false
+    })
+  }
+
+  sortByDate() {
+    this.setState({
+      isSortedByCapacity: false
+    });
+  }
+
+  sortByCapacity() {
+    this.setState({
+      isSortedByCapacity: true
+    });
   }
 
   incrementPage() {
@@ -295,11 +324,11 @@ export default class BatteryLog extends Component {
     endRow -= 1;
     let startRow = 0;
 
-    if ((currentPage % 10) === 0) {
+    if (((this.state.batteryData.length % 10) === 0) && (this.state.batteryData.length > 10)) {
       startRow = endRow - 10;
     }
-    else {
-      startRow = endRow - (currentPage % 10);
+    else if (this.state.batteryData.length > 10){
+      startRow = endRow - (this.state.batteryData.length % 10 - 1);
     }
 
     this.setState({
@@ -318,70 +347,126 @@ export default class BatteryLog extends Component {
           <h1>Battery Log</h1>
         </div>
 
-        <div className="searchBar">
-          <input type="search" className="form-control search-form" placeholder={this.changePlaceholder()} onChange={this.onSearchTermChange}/>
+        <div className="tableOptions">
+          <div className="sortDropdown">
+            <DropdownButton title="Sort" id="sortDropdown">
+              <MenuItem eventKey="1" onClick={() => {this.sortByDate()}}>Date</MenuItem>
+              <MenuItem eventKey="2" onClick={() => {this.sortByCapacity()}}>Capacity</MenuItem>
+            </DropdownButton>
+          </div>
 
-          <FormGroup>
-            <InputGroup>
-              <DropdownButton
-                id="search-dropdown"
-                title=""
-              >
-                <MenuItem key="1" onClick={() => {this.searchBySerial()}}>Serial #</MenuItem>
-                <MenuItem key="2" onClick={() => {this.searchByLaptop()}}>Laptop ID</MenuItem>
-              </DropdownButton>
-            </InputGroup>
-          </FormGroup>
+          <div className="searchBar">
+            <input type="search" className="form-control search-form" placeholder={this.changePlaceholder()} onChange={this.onSearchTermChange}/>
+
+            <FormGroup>
+              <InputGroup>
+                <DropdownButton
+                  id="search-dropdown"
+                  title=""
+                >
+                  <MenuItem key="1" onClick={() => {this.searchBySerial()}}>Serial #</MenuItem>
+                  <MenuItem key="2" onClick={() => {this.searchByLaptop()}}>Laptop ID</MenuItem>
+                </DropdownButton>
+              </InputGroup>
+            </FormGroup>
+          </div>
         </div>
 
         <div className="bootstrapTable">
-          <Table striped bordered condensed hover responsive >
-            <thead>
-              <tr>
-                <th id="_id">Post ID (BatteryId)</th>
-                <th>Battery Serial Number</th>
-                <th>Laptop ID</th>
-                <th>% Capacity</th>
-                <th>Battery Quality</th>
-                <th>Log Date</th>
-                <th>Delete</th>
-                <th>Generate Report</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.batteryData.filter(this.isSearched).map((battery,index) => {
-                if (index >= this.state.firstRow && index <= this.state.lastRow) {
-                  return (
-                    <tr key={battery._id}>
-                      <td id="_id">{battery._id}</td>
-                      {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
-                      <td>{battery.serialNum}</td>
-                      <td>{battery.laptopId}</td>
-                      <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
-                      <td>
-                        {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
-                      </td>
-                      <td>{this.formatDate(battery.log_date)}</td>
-                      <td className="center">
-                        <Button bsStyle="danger" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
-                      </td>
-                      <td className="center">
-                        <a href="#dropLocation"><Button bsStyle="primary" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
-                      </td>
-                    </tr>
-                  )
-                }
-                else return null
-              })}
-            </tbody>
-          </Table>
+          {
+            this.state.isSortedByCapacity
+            ?
+            <Table striped bordered condensed hover responsive >
+              <thead>
+                <tr>
+                  <th id="_id">Post ID (BatteryId)</th>
+                  <th>Battery Serial Number</th>
+                  <th>Laptop ID</th>
+                  <th>% Capacity</th>
+                  <th className="date">Log Date</th>
+                  <th className="center">Battery Quality</th>
+                  <th className="function">Display Data</th>
+                  <th className="function">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.batteryData.filter(this.isSearched).sort((a, b) => (a.mCap[a.mCap.length - 1] / a.rCap) > (b.mCap[b.mCap.length - 1] / b.rCap)).map((battery,index) => {
+                  if (index >= this.state.firstRow && index <= this.state.lastRow) {
+                    return (
+                      <tr key={battery._id}>
+                        <td id="_id">{battery._id}</td>
+                        {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
+                        <td>{battery.serialNum}</td>
+                        <td>{battery.laptopId}</td>
+                        <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
+                        <td className="date">{this.formatDate(battery.log_date)}</td>
+                        <td className="center">
+                          {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                        </td>
+                        <td className="function">
+                          <a href="#dropLocation"><Button bsStyle="default" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
+                        </td>
+                        <td className="function">
+                          <Button bsStyle="default" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
+                        </td>
+                      </tr>
+                    )
+                  }
+                  else return null
+                })}
+              </tbody>
+            </Table>
+            :
+            <Table striped bordered condensed hover responsive >
+              <thead>
+                <tr>
+                  <th id="_id">Post ID (BatteryId)</th>
+                  <th>Battery Serial Number</th>
+                  <th>Laptop ID</th>
+                  <th>% Capacity</th>
+                  <th className="date">Log Date</th>
+                  <th className="center">Battery Quality</th>
+                  <th className="function">Display Data</th>
+                  <th className="function">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.batteryData.filter(this.isSearched).map((battery,index) => {
+                  if (index >= this.state.firstRow && index <= this.state.lastRow) {
+                    return (
+                      <tr key={battery._id}>
+                        <td id="_id">{battery._id}</td>
+                        {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
+                        <td>{battery.serialNum}</td>
+                        <td>{battery.laptopId}</td>
+                        <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
+                        <td className="date">{this.formatDate(battery.log_date)}</td>
+                        <td className="center">
+                          {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                        </td>
+                        <td className="function">
+                          <a href="#dropLocation"><Button bsStyle="default" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
+                        </td>
+                        <td className="function">
+                          <Button bsStyle="default" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
+                        </td>
+                      </tr>
+                    )
+                  }
+                  else return null
+                })}
+              </tbody>
+            </Table>
+          }
 
-          <Pagination>
-            <Pagination.First onClick={() => {this.firstPage()}} />
-            <Pagination.Prev onClick={() => {this.decrementPage()}} />
-            <Pagination.Next onClick={() => {this.incrementPage()}} />
-            <Pagination.Last onClick={() => {this.lastPage()}} />
-          </Pagination>
+          <div className="pagination">
+            <Pagination>
+              <Pagination.First onClick={() => {this.firstPage()}} />
+              <Pagination.Prev onClick={() => {this.decrementPage()}} />
+              <Pagination.Next onClick={() => {this.incrementPage()}} />
+              <Pagination.Last onClick={() => {this.lastPage()}} />
+            </Pagination>
+          </div>
         </div>
 
         {
@@ -399,6 +484,7 @@ export default class BatteryLog extends Component {
           this.state.reportSectionDisplayed
           ?
           <Report
+            // batteryId={this.state.selectedBatteryId}
             serialNum={this.state.selectedSerialNumber}
             laptopId={this.state.selectedLaptopId}
             rCap={this.state.selectedRatedCapacity}
@@ -409,6 +495,7 @@ export default class BatteryLog extends Component {
             isWindows={this.state.selectedIsWindows}
             capPlotData={this.state.capPlotData}
             dcPlotData={this.state.dcPlotData}
+            disableBatteryReport={this.disableBatteryReport}
           />
           : null
         }

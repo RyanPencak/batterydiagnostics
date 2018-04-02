@@ -1,12 +1,19 @@
-.CircularProgressbar {
-    width: 50% !important;
-}
-
 .Report {
   display: flex;
   flex-direction: column;
   min-width: 1000px;
   min-height: 1000px;
+}
+
+.up {
+  /* display: none; */
+  position: fixed;
+  top: 5%;
+  right: 1%;
+}
+
+.CircularProgressbar {
+    width: 30% !important;
 }
 
 .progressbar-red .CircularProgressbar-path {

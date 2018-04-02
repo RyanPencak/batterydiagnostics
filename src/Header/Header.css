@@ -6,5 +6,9 @@
   color: #cdd2d8;
   box-shadow: 1px 4px 5px #999;
   padding: 15px;
-  margin-top: 20px;
+  margin: 10px 0 10px 0;
+}
+
+h1 {
+  margin: 10px 0 10px 0;
 }

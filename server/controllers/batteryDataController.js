@@ -20,7 +20,7 @@ exports.list_all_batteries = function(req, res) {
 // POST Function
 exports.create_battery = function(req, res) {
   var query = { serialNum: req.body.serialNum };
-  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "isUpdated": true, "log_date": Date.now() };
+  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "is_windows": req.body.is_windows, "is_software": req.body.is_software, "isUpdated": true, "log_date": Date.now() };
   var options = { new: true, runValidators: true };
   Battery.findOneAndUpdate(query, update, options, function(err, battery) {
     if (err) {

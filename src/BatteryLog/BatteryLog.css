@@ -1,43 +1,58 @@
-/* .Container {
-  background-color: #a3a7b7;
-  border-radius: 25px;
-  box-shadow: 1px 4px 5px #999;
-  padding: 15px;
-  margin-top: 20px;
-} */
-
 .BatteryLog {
   display: flex;
   flex-direction: column;
 }
 
-.bootstrapTable {
-
+.BatteryLog .bootstrapTable {
+  height: 450px;
 }
 
-/* .TableButtons {
-  display: flex;
-  float: right;
-} */
+.date {
+  width: 200px;
+}
 
 .center {
-  /* display: flex; */
-  /* flex-direction: column; */
+  width: 120px;
+  text-align: center;
+  align-items: center;
+}
+
+.function {
+  width: 110px;
+  text-align: center;
   align-items: center;
 }
 
 .form-control {
-  width: 20% !important;
+  width: 250px;
 }
 
 .dropdown-menu {
   min-width: 10px !important;
 }
 
+.tableOptions {
+  padding-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.sortDropdown {
+  padding: 0 20px 0 0;
+  justify-content: flex-end;
+}
+
 .searchBar {
   display: flex;
   justify-content: flex-end;
   margin: 0 70px 20px 0;
+}
+
+.pagination {
+  display: flex;
+  position: absolute;
+  top: 72px;
+  right: 20px;
 }
 
 #_id {
