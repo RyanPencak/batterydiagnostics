@@ -74,14 +74,16 @@ export default class BatteryLog extends Component {
     if(this.state.dataLength !== 0) {
       this.getBatteryData();
       if(this.state.batteryData.length > this.state.dataLength) {
-        this.setState({dataLength: this.state.batteryData.length});
-        this.sendEmail(this.state.batteryData[0]);
+        this.setState({
+          dataLength: this.state.batteryData.length
+        }, this.sendEmail(this.state.batteryData[0]));
       }
       else if (this.state.isUpdated === true) {
         axios.patch('/api/battery/' + this.state.batteryData[0]._id)
           .then(() => {
-            this.sendEmail(this.state.batteryData[0]);
-            this.setState({isUpdated: false});
+            this.setState({
+              isUpdated: false
+            }, this.sendEmail(this.state.batteryData[0]));
           })
           .catch(err => {
             console.log(err);

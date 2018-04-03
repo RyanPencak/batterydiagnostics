@@ -76,7 +76,7 @@ exports.send_email = function(req, res) {
       var template = handlebars.compile(html);
       var replacements = {
            serialNum: battery.serialNum,
-           percentCap: ((battery.mCap[battery.mCap.length-1]/battery.rCap)*100),
+           percentCap: ((battery.mCap[battery.mCap.length-1]/battery.rCap)*100).toFixed(2),
            rCap: battery.rCap,
            mCap: battery.mCap[battery.mCap.length-1],
            cycles: battery.cycles
@@ -105,7 +105,7 @@ exports.send_email = function(req, res) {
       var replacements = {
            serialNum: battery.serialNum,
            laptopId: battery.laptopId,
-           percentCap: ((battery.mCap[battery.mCap.length-1]/battery.rCap)*100),
+           percentCap: ((battery.mCap[battery.mCap.length-1]/battery.rCap)*100).toFixed(2),
            rCap: battery.rCap,
            mCap: battery.mCap[battery.mCap.length-1],
            cycles: battery.cycles
