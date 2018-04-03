@@ -63,6 +63,7 @@ export default class BatteryLog extends Component {
     this.decrementPage = this.decrementPage.bind(this);
     this.firstPage = this.firstPage.bind(this);
     this.lastPage = this.lastPage.bind(this);
+    this.capacitySort = this.capacitySort.bind(this);
   }
 
   componentDidMount() {
@@ -340,6 +341,12 @@ export default class BatteryLog extends Component {
     })
   }
 
+  capacitySort(battery1, battery2) {
+    if((battery1.mCap[battery1.mCap.length - 1] / battery1.rCap) > (battery2.mCap[battery2.mCap.length - 1] / battery2.rCap)) return 1;
+    if((battery1.mCap[battery1.mCap.length - 1] / battery1.rCap) < (battery2.mCap[battery2.mCap.length - 1] / battery2.rCap)) return -1;
+    return 0;
+  }
+
   render() {
 
     return (
@@ -400,7 +407,7 @@ export default class BatteryLog extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.batteryData.filter(this.isSearched).sort((a, b) => (a.mCap[a.mCap.length - 1] / a.rCap) > (b.mCap[b.mCap.length - 1] / b.rCap)).map((battery,index) => {
+                {this.state.batteryData.filter(this.isSearched).sort(this.capacitySort).map((battery,index) => {
                   if (index >= this.state.firstRow && index <= this.state.lastRow) {
                     return (
                       <tr key={battery._id}>
