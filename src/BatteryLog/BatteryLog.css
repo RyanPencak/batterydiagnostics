@@ -7,54 +7,55 @@
   height: 450px;
 }
 
-.date {
+.BatteryLog .date {
   width: 200px;
 }
 
-.center {
+.BatteryLog .center {
   width: 120px;
   text-align: center;
   align-items: center;
 }
 
-.function {
+.BatteryLog .function {
   width: 110px;
   text-align: center;
   align-items: center;
 }
 
-.form-control {
+.BatteryLog .form-control {
   width: 250px;
 }
 
-.dropdown-menu {
+.BatteryLog .dropdown-menu {
   min-width: 10px !important;
 }
 
-.tableOptions {
+.BatteryLog .tableOptions {
   padding-top: 15px;
   display: flex;
   flex-direction: row;
 }
 
-.sortDropdown {
-  padding: 0 20px 0 0;
+.BatteryLog .sortDropdown {
+  padding: 10px 20px 0 0;
   justify-content: flex-end;
 }
 
-.searchBar {
+.BatteryLog .searchBar {
   display: flex;
   justify-content: flex-end;
-  margin: 0 70px 20px 0;
+  margin: 10px 0 0 0;
 }
 
-.pagination {
-  display: flex;
-  position: absolute;
+.BatteryLog .pagination {
+  float: right;
+  margin: 0 5px 5px 0;
+  /* position: absolute;
   top: 72px;
-  right: 20px;
+  right: 20px; */
 }
 
-#_id {
+.BatteryLog #_id {
   display: none;
 }

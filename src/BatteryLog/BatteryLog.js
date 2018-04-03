@@ -371,6 +371,14 @@ export default class BatteryLog extends Component {
             </FormGroup>
           </div>
         </div>
+        <div className="pagination">
+          <Pagination>
+            <Pagination.First onClick={() => {this.firstPage()}} />
+            <Pagination.Prev onClick={() => {this.decrementPage()}} />
+            <Pagination.Next onClick={() => {this.incrementPage()}} />
+            <Pagination.Last onClick={() => {this.lastPage()}} />
+          </Pagination>
+        </div>
 
         <div className="bootstrapTable">
           {
@@ -395,7 +403,6 @@ export default class BatteryLog extends Component {
                     return (
                       <tr key={battery._id}>
                         <td id="_id">{battery._id}</td>
-                        {/* <td><FormGroup><Radio name={`${battery._id}`}></Radio></FormGroup></td> */}
                         <td>{battery.serialNum}</td>
                         <td>{battery.laptopId}</td>
                         <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
@@ -458,15 +465,6 @@ export default class BatteryLog extends Component {
               </tbody>
             </Table>
           }
-
-          <div className="pagination">
-            <Pagination>
-              <Pagination.First onClick={() => {this.firstPage()}} />
-              <Pagination.Prev onClick={() => {this.decrementPage()}} />
-              <Pagination.Next onClick={() => {this.incrementPage()}} />
-              <Pagination.Last onClick={() => {this.lastPage()}} />
-            </Pagination>
-          </div>
         </div>
 
         {
