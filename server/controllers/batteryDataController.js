@@ -37,7 +37,7 @@ exports.create_battery = function(req, res) {
         // battery["isUpdated"] = true;
 
         if(req.body.dcVol != null) {
-          battery.dcCap = req.body.dcCap;
+          battery.dcVol = req.body.dcVol;
         }
         if(req.body.dcCur != null) {
           battery.dcCur = req.body.dcCur;
