@@ -5,12 +5,10 @@ const app = express();
 const mongoose = require('mongoose');
 const batteryData = require('./models/batteryDataModel');
 const bodyParser = require('body-parser');
-// const nodemailer = require('nodemailer');
 const axios = require('axios');
-// const https = require('https');
 
 // define database url
-const dburl = 'mongodb://ryanpencak:rvp224224@batterydata-shard-00-00-h1m74.mongodb.net:27017,batterydata-shard-00-01-h1m74.mongodb.net:27017,batterydata-shard-00-02-h1m74.mongodb.net:27017/test?ssl=true&replicaSet=BatteryData-shard-0&authSource=admin';
+const dburl = 'mongodb://ryanpencak:rvp224224@batteries-shard-00-00-rcuv5.mongodb.net:27017,batteries-shard-00-01-rcuv5.mongodb.net:27017,batteries-shard-00-02-rcuv5.mongodb.net:27017/test?ssl=true&replicaSet=batteries-shard-0&authSource=admin';
 
 // connect mongoose cloud
 mongoose.connect(dburl, function (err, db) {
@@ -61,7 +59,7 @@ app.use((err, _req, res, _next) => {
 });
 
 
-
+module.exports = app;
 
 
 
@@ -132,5 +130,3 @@ app.use((err, _req, res, _next) => {
 //
 
 // export module
-
-module.exports = app;
