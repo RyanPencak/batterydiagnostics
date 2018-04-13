@@ -84,7 +84,7 @@ exports.send_email = function(req, res) {
       var htmlToSend = template(replacements);
       var mailOptions = {
           from: '"Battery Diagnostics Server" <BatteryDiagnosticServer@gmail.com>', // sender address
-          to: 'BatteryDiagnosticServer@gmail.com', // list of receivers
+          to: 'ryanpencak@gmail.com', // list of receivers
           subject: 'Battery Test Complete', // Subject line
           html: htmlToSend
       };
@@ -113,7 +113,7 @@ exports.send_email = function(req, res) {
       var htmlToSend = template(replacements);
       var mailOptions = {
           from: '"Battery Diagnostics Server" <BatteryDiagnosticServer@gmail.com>', // sender address
-          to: 'BatteryDiagnosticServer@gmail.com', // list of receivers
+          to: 'ryanpencak@gmail.com', // list of receivers
           subject: 'Battery Flagged', // Subject line
           html: htmlToSend
           // html: '<h1> Battery Flagged <h1><h4>Serial Number: {{replacements.serialNum}}</h4><h4>Laptop ID: {{battery.laptopId}}</h4><h4>Manufacturer Rated Maximum Capacity: {{battery.rCap}}</h4><h4>Immediate Maximum Capacity: {{battery.mCap[battery.mCap.length-1]}}</h4><h4>Cycle Count: {{battery.cycles}}</h4>' // html body
