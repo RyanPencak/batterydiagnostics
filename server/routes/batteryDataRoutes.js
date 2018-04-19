@@ -1,24 +1,35 @@
+/****************************************
+* Ryan Pencak
+* Bucknell University
+* © 2018 Ryan Pencak ALL RIGHTS RESERVED
+*****************************************/
+
 const router = require('express').Router();
 const batteryData = require('../controllers/batteryDataController');
 const mongoose = require('mongoose');
 const Battery = mongoose.model('batteryData');
 
-// NEW GET
+// GET Request: get all battery data
 router.get('/', batteryData.list_all_batteries);
 
-// NEW POST
+// POST Request: post battery
 router.post('/', batteryData.create_battery);
 
-// NEW GET BY ID
+// Get with ID Param: get battery with given ID
 router.get('/:batteryId', batteryData.read_battery);
 
-// PATCH
+// PATCH Request: set isUpdated to false for that battery
 router.patch('/:batteryId', batteryData.reset_updates);
 
-// NEW DELETE
+// DELETE Request: remove specified battery from the database
 router.delete('/:batteryId', batteryData.delete_battery);
 
 module.exports = router;
+
+
+
+
+/* Old Methods */
 
 // WORKING GET
 // router.get('/', (req, res, next) => {

@@ -1,7 +1,13 @@
+/****************************************
+* Ryan Pencak
+* Bucknell University
+* © 2018 Ryan Pencak ALL RIGHTS RESERVED
+*****************************************/
+
 const mongoose = require('mongoose');
 const Battery = mongoose.model('batteryData');
 
-// GET Function
+// GET Function: get all batteries
 exports.list_all_batteries = function(req, res) {
   Battery.find({}, null, {sort: {log_date: 'descending'}}, function(err, battery) {
     if (err) {
@@ -9,15 +15,9 @@ exports.list_all_batteries = function(req, res) {
     }
     res.json(battery);
   });
-  // Battery.find({}, function(err, battery) {
-  //   if (err)
-  //     res.send(err);
-  //
-  //   res.json(battery);
-  // });
 };
 
-// POST Function
+// POST Function: post battery to create new or update existing battery
 exports.create_battery = function(req, res) {
   var query = { serialNum: req.body.serialNum };
   var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "is_windows": req.body.is_windows, "is_software": req.body.is_software, "isUpdated": true, "log_date": Date.now() };
@@ -60,6 +60,7 @@ exports.create_battery = function(req, res) {
   });
 };
 
+// Get Battery By ID
 exports.read_battery = function(req, res) {
   Battery.findById(req.params.batteryId, function(err, battery) {
     if (err)
@@ -77,7 +78,7 @@ exports.update_battery = function(req, res) {
   });
 };
 
-// return updates to false
+// Set isUpdated to false after checking battery on front-end
 exports.reset_updates = function(req, res) {
   Battery.findOneAndUpdate({ isUpdated: true }, { "isUpdated": false }, function(err, battery) {
     if (err) {
@@ -87,6 +88,7 @@ exports.reset_updates = function(req, res) {
   });
 };
 
+// Delete Battery from database
 exports.delete_battery = function(req, res) {
   Battery.remove({_id: req.params.batteryId}, function(err, battery) {
     if (err)

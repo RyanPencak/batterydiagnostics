@@ -1,6 +1,13 @@
+/****************************************
+* Ryan Pencak
+* Bucknell University
+* © 2018 Ryan Pencak ALL RIGHTS RESERVED
+*****************************************/
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+// define mongoose schema for battery
 var BatteryDataSchema = new Schema({
   serialNum: {
     type: String,
@@ -47,20 +54,5 @@ var BatteryDataSchema = new Schema({
     default: Date.now()
   }
 });
-
-// function formatDate(date) {
-//   var monthNames = [
-//     "January", "February", "March",
-//     "April", "May", "June", "July",
-//     "August", "September", "October",
-//     "November", "December"
-//   ];
-//
-//   var day = date.getDate();
-//   var monthIndex = date.getMonth();
-//   var year = date.getFullYear();
-//
-//   return day + ' ' + monthNames[monthIndex] + ' ' + year;
-// }
 
 module.exports = mongoose.model('batteryData', BatteryDataSchema);

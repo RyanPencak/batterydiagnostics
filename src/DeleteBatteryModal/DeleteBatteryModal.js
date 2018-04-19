@@ -1,3 +1,9 @@
+/****************************************
+* Ryan Pencak
+* Bucknell University
+* © 2018 Ryan Pencak ALL RIGHTS RESERVED
+*****************************************/
+
 import './DeleteBatteryModal.css';
 import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
@@ -11,6 +17,7 @@ export default class DeleteBatteryModal extends Component {
     this.deleteBattery = this.deleteBattery.bind(this);
   }
 
+  // deleteBattery Function: HTTP DELETE Request to server to remove battery with batteryId
   deleteBattery(batteryId) {
     axios.delete('/api/battery/' + batteryId)
       .then(() => {
@@ -27,6 +34,7 @@ export default class DeleteBatteryModal extends Component {
   render() {
 
     return (
+      // React Bootstrap Modal
       <div className="static-modal">
         <Modal.Dialog>
           <Modal.Header>

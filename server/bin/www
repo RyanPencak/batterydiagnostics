@@ -4,12 +4,12 @@
 var app = require('../app');
 var http = require('http');
 
-// set port
+// set port to development or local
 var port = process.env.PORT || 3001;
 app.set('port', port);
 
-// create server
+// create http server
 var server = http.createServer(app);
 
-// start server and listen on designated port 3001
+// start server and listen on designated port
 server.listen(port);

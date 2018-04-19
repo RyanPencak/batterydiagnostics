@@ -1,3 +1,9 @@
+/****************************************
+* Ryan Pencak
+* Bucknell University
+* © 2018 Ryan Pencak ALL RIGHTS RESERVED
+*****************************************/
+
 import './Header.css';
 import React, { Component } from 'react'
 

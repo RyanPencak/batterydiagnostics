@@ -1,3 +1,69 @@
+# Automated Software Testing
+
+Downloading Scripts
+-------------------------------------------------------------------------------------
+
+The scripts are available to download at: https://github.com/Bucknell-ECE/BatteryTestingScripts
+
+
+Running Scripts
+-------------------------------------------------------------------------------------
+
+###### Windows:
+* run windows_battery_test.ps1 with PowerShell
+
+###### Mac:
+* sh mac_battery_test.sh
+
+
+Scheduling Scripts
+-------------------------------------------------------------------------------------
+
+###### Windows:
+* https://community.spiceworks.com/how_to/17736-run-powershell-scripts-from-task-scheduler
+
+###### Mac
+In Terminal:
+1. sudo VISUAL=[enter your favorite text editor here] crontab -e
+2. enter admin account password
+
+In Text Editor:
+3. type schedule syntax and path to script
+4. 00 11 * * * /[path to script]/mac_battery_test.sh
+5. Use Crontab Syntax Generator: https://crontab-generator.org/
+6. Save and exit text editor
+
+-------------------------------------------------------------------------------------
+# Web App Deployment
+
+Required Packages
+-------------------------------------------------------------------------------------
+
+1.	node and npm
+    * https://www.npmjs.com/get-npmnpm
+
+
+Download Web App Source Files
+-------------------------------------------------------------------------------------
+
+In Linux Terminal:
+1.	git clone https://github.com/Bucknell-ECE/bucknellbatterydiagnostics.git
+2.	cd bucknellbatterydiagnostics
+
+
+Run Web App Locally
+-------------------------------------------------------------------------------------
+
+In Linux Terminal:
+1.	npm install
+2.	npm start
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+
+# React App Documentation
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
@@ -300,7 +366,7 @@ In the WebStorm menu `Run` select `Edit Configurations...`. Then click `+` and s
 
 Start your app by running `npm start`, then press `^D` on macOS or `F9` on Windows and Linux or click the green debug icon to start debugging in WebStorm.
 
-The same way you can debug your application in IntelliJ IDEA Ultimate, PhpStorm, PyCharm Pro, and RubyMine. 
+The same way you can debug your application in IntelliJ IDEA Ultimate, PhpStorm, PyCharm Pro, and RubyMine.
 
 ## Formatting Code Automatically
 
@@ -1989,7 +2055,7 @@ If you’re using [Apache HTTP Server](https://httpd.apache.org/), you need to c
     RewriteRule ^ index.html [QSA,L]
 ```
 
-It will get copied to the `build` folder when you run `npm run build`. 
+It will get copied to the `build` folder when you run `npm run build`.
 
 If you’re using [Apache Tomcat](http://tomcat.apache.org/), you need to follow [this Stack Overflow answer](https://stackoverflow.com/a/41249464/4878474).
 
@@ -2418,7 +2484,7 @@ To resolve this:
 1. Open an issue on the dependency's issue tracker and ask that the package be published pre-compiled.
   * Note: Create React App can consume both CommonJS and ES modules. For Node.js compatibility, it is recommended that the main entry point is CommonJS. However, they can optionally provide an ES module entry point with the `module` field in `package.json`. Note that **even if a library provides an ES Modules version, it should still precompile other ES6 features to ES5 if it intends to support older browsers**.
 
-2. Fork the package and publish a corrected version yourself. 
+2. Fork the package and publish a corrected version yourself.
 
 3. If the dependency is small enough, copy it to your `src/` folder and treat it as application code.
 
