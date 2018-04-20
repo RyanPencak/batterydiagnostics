@@ -5,6 +5,7 @@
 *****************************************/
 
 import './BatteryLog.css';
+import loading from './loading.svg';
 import React, { Component } from 'react';
 import { Table, Button, Glyphicon, MenuItem, FormGroup, InputGroup, DropdownButton, Pagination } from 'react-bootstrap';
 import DeleteBatteryModal from '../DeleteBatteryModal/DeleteBatteryModal.js';
@@ -432,103 +433,115 @@ export default class BatteryLog extends Component {
               </InputGroup>
             </FormGroup>
           </div>
+
+          {/* Pagination */}
+          <div className="pagination">
+            <Pagination>
+              <Pagination.First onClick={() => {this.firstPage()}} />
+              <Pagination.Prev onClick={() => {this.decrementPage()}} />
+              <Pagination.Next onClick={() => {this.incrementPage()}} />
+              <Pagination.Last onClick={() => {this.lastPage()}} />
+            </Pagination>
+          </div>
         </div>
 
-        {/* Pagination */}
-        <div className="pagination">
-          <Pagination>
-            <Pagination.First onClick={() => {this.firstPage()}} />
-            <Pagination.Prev onClick={() => {this.decrementPage()}} />
-            <Pagination.Next onClick={() => {this.incrementPage()}} />
-            <Pagination.Last onClick={() => {this.lastPage()}} />
-          </Pagination>
-        </div>
 
         {/* Battery Data Table */}
         <div className="bootstrapTable">
+          {/* Ternary for Loading Data Image */}
           {
-            // If the table is sorted by capacity, display the table with capacitySort; else display with date sort
-            this.state.isSortedByCapacity
+            this.state.batteryData.length !== 0
             ?
-            <Table striped bordered condensed hover responsive >
-              <thead>
-                <tr>
-                  <th id="_id">Post ID (BatteryId)</th>
-                  <th>Battery Serial Number</th>
-                  <th>Laptop ID</th>
-                  <th>% Capacity</th>
-                  <th className="date">Log Date (UTC)</th>
-                  <th className="center">Battery Quality</th>
-                  <th className="function">Display Data</th>
-                  <th className="function">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.batteryData.filter(this.isSearched).sort(this.capacitySort).map((battery,index) => {
-                  if (index >= this.state.firstRow && index <= this.state.lastRow) {
-                    return (
-                      <tr key={battery._id}>
-                        <td id="_id">{battery._id}</td>
-                        <td>{battery.serialNum}</td>
-                        <td>{battery.laptopId}</td>
-                        <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
-                        <td className="date">{this.formatDate(battery.log_date[battery.log_date.length - 1])}</td>
-                        <td className="center">
-                          {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
-                        </td>
-                        <td className="function">
-                          <a href="#dropLocation"><Button bsStyle="default" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
-                        </td>
-                        <td className="function">
-                          <Button bsStyle="default" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
-                        </td>
-                      </tr>
-                    )
-                  }
-                  else return null
-                })}
-              </tbody>
-            </Table>
+            <div>
+              {
+                // If the table is sorted by capacity, display the table with capacitySort; else display with date sort
+                this.state.isSortedByCapacity
+                ?
+                <Table striped bordered condensed hover responsive >
+                  <thead>
+                    <tr>
+                      <th id="_id">Post ID (BatteryId)</th>
+                      <th>Battery Serial Number</th>
+                      <th>Laptop ID</th>
+                      <th>% Capacity</th>
+                      <th className="date">Log Date (UTC)</th>
+                      <th className="center">Battery Quality</th>
+                      <th className="function">Display Data</th>
+                      <th className="function">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.batteryData.filter(this.isSearched).sort(this.capacitySort).map((battery,index) => {
+                      if (index >= this.state.firstRow && index <= this.state.lastRow) {
+                        return (
+                          <tr key={battery._id}>
+                            <td id="_id">{battery._id}</td>
+                            <td>{battery.serialNum}</td>
+                            <td>{battery.laptopId}</td>
+                            <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
+                            <td className="date">{this.formatDate(battery.log_date[battery.log_date.length - 1])}</td>
+                            <td className="center">
+                              {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                            </td>
+                            <td className="function">
+                              <a href="#dropLocation"><Button bsStyle="default" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
+                            </td>
+                            <td className="function">
+                              <Button bsStyle="default" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
+                            </td>
+                          </tr>
+                        )
+                      }
+                      else return null
+                    })}
+                  </tbody>
+                </Table>
+                :
+                <Table striped bordered condensed hover responsive >
+                  <thead>
+                    <tr>
+                      <th id="_id">Post ID (BatteryId)</th>
+                      <th>Battery Serial Number</th>
+                      <th>Laptop ID</th>
+                      <th>% Capacity</th>
+                      <th className="date">Log Date (UTC)</th>
+                      <th className="center">Battery Quality</th>
+                      <th className="function">Display Data</th>
+                      <th className="function">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.batteryData.filter(this.isSearched).map((battery,index) => {
+                      if (index >= this.state.firstRow && index <= this.state.lastRow) {
+                        return (
+                          <tr key={battery._id}>
+                            <td id="_id">{battery._id}</td>
+                            <td>{battery.serialNum}</td>
+                            <td>{battery.laptopId}</td>
+                            <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
+                            <td className="date">{this.formatDate(battery.log_date[battery.log_date.length - 1])}</td>
+                            <td className="center">
+                              {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
+                            </td>
+                            <td className="function">
+                              <a href="#dropLocation"><Button bsStyle="default" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
+                            </td>
+                            <td className="function">
+                              <Button bsStyle="default" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
+                            </td>
+                          </tr>
+                        )
+                      }
+                      else return null
+                    })}
+                  </tbody>
+                </Table>
+              }
+            </div>
             :
-            <Table striped bordered condensed hover responsive >
-              <thead>
-                <tr>
-                  <th id="_id">Post ID (BatteryId)</th>
-                  <th>Battery Serial Number</th>
-                  <th>Laptop ID</th>
-                  <th>% Capacity</th>
-                  <th className="date">Log Date (UTC)</th>
-                  <th className="center">Battery Quality</th>
-                  <th className="function">Display Data</th>
-                  <th className="function">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.batteryData.filter(this.isSearched).map((battery,index) => {
-                  if (index >= this.state.firstRow && index <= this.state.lastRow) {
-                    return (
-                      <tr key={battery._id}>
-                        <td id="_id">{battery._id}</td>
-                        <td>{battery.serialNum}</td>
-                        <td>{battery.laptopId}</td>
-                        <td>{((battery.mCap[battery.mCap.length - 1] / battery.rCap) * 100).toFixed(2)} %</td>
-                        <td className="date">{this.formatDate(battery.log_date[battery.log_date.length - 1])}</td>
-                        <td className="center">
-                          {(battery.mCap[battery.mCap.length - 1] / battery.rCap) > 0.4 ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />}
-                        </td>
-                        <td className="function">
-                          <a href="#dropLocation"><Button bsStyle="default" bsSize="small" onClick={() => {this.toggleBatteryReport(battery._id)}}><Glyphicon glyph="tasks" /></Button></a>
-                        </td>
-                        <td className="function">
-                          <Button bsStyle="default" bsSize="small" onClick={() => {this.toggleDeleteBatteryModal(battery._id)}}><Glyphicon glyph="trash" /></Button>
-                        </td>
-                      </tr>
-                    )
-                  }
-                  else return null
-                })}
-              </tbody>
-            </Table>
+            <div className="loading">
+              <img src={loading} alt="loading"/>
+            </div>
           }
         </div>
 

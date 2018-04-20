@@ -2,32 +2,32 @@
   display: flex;
   flex-direction: column;
   min-width: 1000px;
-  min-height: 1000px;
+  min-height: 800px;
 }
 
-.up {
+.Report .up {
   /* display: none; */
   position: fixed;
   top: 5%;
   right: 1%;
 }
 
-.CircularProgressbar {
+.Report .CircularProgressbar {
     width: 30% !important;
 }
 
-.progressbar-red .CircularProgressbar-path {
+.Report .progressbar-red .CircularProgressbar-path {
   stroke: red !important;
 }
 
-.progressbar-red .CircularProgressbar-text {
+.Report .progressbar-red .CircularProgressbar-text {
   fill: red !important;
 }
 
-.progressbar-green .CircularProgressbar-path {
+.Report .progressbar-green .CircularProgressbar-path {
   stroke: green !important;
 }
 
-.progressbar-green .CircularProgressbar-text {
+.Report .progressbar-green .CircularProgressbar-text {
   fill: green !important;
 }

@@ -20,7 +20,7 @@ exports.list_all_batteries = function(req, res) {
 // POST Function: post battery to create new or update existing battery
 exports.create_battery = function(req, res) {
   var query = { serialNum: req.body.serialNum };
-  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "is_windows": req.body.is_windows, "is_software": req.body.is_software, "isUpdated": true, "log_date": Date.now() };
+  var update = { "rCap": req.body.rCap, "laptopId": req.body.laptopId, "cycles": req.body.cycles, "is_windows": req.body.is_windows, "is_software": req.body.is_software, "isUpdated": true };
   var options = { new: true, runValidators: true };
   Battery.findOneAndUpdate(query, update, options, function(err, battery) {
     if (err) {
@@ -31,11 +31,8 @@ exports.create_battery = function(req, res) {
 
       if(!battery) {
         var battery = new Battery(req.body);
-        battery.log_date = Date.now();
       }
       else {
-        // battery["isUpdated"] = true;
-
         if(req.body.dcVol != null) {
           battery.dcVol = req.body.dcVol;
         }
@@ -46,6 +43,7 @@ exports.create_battery = function(req, res) {
           battery.dcCap = req.body.dcCap;
         }
         battery.mCap.push(req.body.mCap);
+        battery.log_date.push(Date.now());
       }
 
 

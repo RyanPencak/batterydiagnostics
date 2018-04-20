@@ -3,6 +3,10 @@
   flex-direction: column;
 }
 
+.BatteryLog .header {
+  margin-left: 10px;
+}
+
 .BatteryLog .bootstrapTable {
   height: 450px;
 }
@@ -37,25 +41,32 @@
   flex-direction: row;
 }
 
-.BatteryLog .sortDropdown {
+.BatteryLog .tableOptions .sortDropdown {
   padding: 10px 20px 0 0;
-  justify-content: flex-end;
+  align-items: flex-start;
+  margin-left: 10px;
 }
 
-.BatteryLog .searchBar {
+.BatteryLog .tableOptions .searchBar {
   display: flex;
-  justify-content: flex-end;
+  align-items: flex-start;
   margin: 10px 0 0 0;
 }
 
-.BatteryLog .pagination {
-  float: right;
-  margin: 0 5px 5px 0;
-  /* position: absolute;
-  top: 72px;
-  right: 20px; */
+.BatteryLog .tableOptions .pagination {
+  margin-left: auto;
+  margin-top: 5px;
+  margin-right: 10px;
+  align-items: flex-start;
 }
 
 .BatteryLog #_id {
   display: none;
+}
+
+.BatteryLog .loading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
