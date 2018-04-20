@@ -5,6 +5,10 @@
   min-height: 800px;
 }
 
+.Report h1 {
+  margin-left: 10px;
+}
+
 .Report .up {
   /* display: none; */
   position: fixed;

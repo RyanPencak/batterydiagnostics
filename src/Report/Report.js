@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { Button, Glyphicon, Grid, Row, Col } from 'react-bootstrap';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Label, LabelList, ReferenceLine } from 'recharts';
+import { Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Label, LabelList, ReferenceLine } from 'recharts';
 
 export default class Report extends Component {
 
@@ -122,7 +122,7 @@ export default class Report extends Component {
                         <Label value="Capacity (mAh)" angle={-90} position="insideLeft" />
                       </YAxis>
                       {/* Optional Tooltip Animation */}
-                      {/* <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} /> */}
+                      <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} />
                       <Legend verticalAlign="middle" layout="vertical" align="right" iconSize={26} height={36}/>
                     </LineChart>
                   </ResponsiveContainer>
@@ -159,7 +159,7 @@ export default class Report extends Component {
                       </YAxis>
                       {/* Optional Tooltip Animation */}
                       {/* <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} /> */}
-                      <Legend verticalAlign="middle" layout="vertical" align="right" iconSize={26} height={36}/>
+                      <Legend iconType="line" verticalAlign="middle" layout="vertical" align="right" iconSize={26} height={36}/>
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
