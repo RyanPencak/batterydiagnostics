@@ -152,7 +152,7 @@ export default class Report extends Component {
                         <Label value="Capacity (mAh)" height={1} position="insideBottom" offset={-6} />
                       </XAxis>
                       <YAxis yAxisId="voltage" orientation="left" domain={["auto", "auto"]}>
-                        <Label value="Voltage (V)" angle={-90} position="insideLeft" />
+                        <Label value="Voltage (mV)" angle={-90} position="insideLeft" />
                       </YAxis>
                       <YAxis yAxisId="current" orientation="right" domain={["auto", "auto"]}>
                         <Label value="Current (mA)" angle={-90} position="insideRight" />

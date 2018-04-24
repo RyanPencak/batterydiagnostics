@@ -1,3 +1,165 @@
+# Web App Architecture
+
+Front End (src)
+-------------------------------------------------------------------------------------
+
+###### app:
+  * app: main server file connects to MongoDB and sets routes
+
+###### bin:
+  * www: initializes HTTP server and listens on port
+
+###### controllers:
+  * batteryDataController: defines functions with Mongoose operations for HTTP requests on battery instance
+  * emailController: defines functions with Mongoose operations for HTTP requests on email instance
+
+###### models:
+  * batteryDataModel: defines the Mongoose schema for a battery
+
+###### routes:
+  * batteryDataRoutes: define HTTP request routes for battery instances
+  * emailRoutes: define HTTP request routes for email instances
+
+
+Back End (server)
+-------------------------------------------------------------------------------------
+
+###### App:
+  * Main frontend javascript file calls components
+
+###### Header:
+  * Header component renders page header
+
+###### BatteryLog:
+  * BatteryLog component contains functions to handle data and renders the log of batteries
+
+###### DeleteBatteryModal:
+  * DeleteBatteryModal component renders the modal for deleting a battery
+
+###### Report:
+  * Report component handles data selected by user in log and generates a battery health report
+
+-------------------------------------------------------------------------------------
+# Data Model
+
+Mongoose Schema
+-------------------------------------------------------------------------------------
+serialNum: { type: String, required: 'enter battery serial number' },
+laptopId: { type: String },
+rCap: { type: Number, required: 'enter expected battery capacity' },
+mCap: { type: Array, required: 'enter current battery capacity' },
+cycles: { type: Number, required: 'enter charge cycle count' },
+dcVol: { type: Array },
+dcCur: { type: Array },
+dcCap: { type: Array },
+is_software: { type: Boolean, default: false },
+is_windows: { type: Boolean, default: false },
+isUpdated: { type: Boolean, default: false },
+log_date: { type: [Date], default: Date.now() }
+
+-------------------------------------------------------------------------------------
+# Web App Deployment
+
+Required Packages
+-------------------------------------------------------------------------------------
+
+1.	node and npm
+    * https://www.npmjs.com/get-npmnpm
+
+
+Download Web App Source Files
+-------------------------------------------------------------------------------------
+
+In Linux Terminal:
+1.	git clone git@github.com:RyanPencak/batterydiagnostics.git
+2.	cd bucknellbatterydiagnostics
+
+
+Run Web App Locally
+-------------------------------------------------------------------------------------
+
+In Linux Terminal:
+1.	npm install
+2.	npm start
+
+
+Redeploying the Web App to Heroku (After Changes Made)
+-------------------------------------------------------------------------------------
+
+In Linux Terminal:
+1.	If Not Done:
+    * git clone git@github.com:RyanPencak/batterydiagnostics.git
+2.	cd batterydiagnostics
+3.	[Make desired changes to code]
+4.	heroku login
+    * username: [input user email here]
+    * password: [input password here]
+5.	heroku git: remote -v batterydiagnostics
+6.	git add .
+7.	git commit -m “commit message”
+8.	git push origin master
+9.	git push heroku master
+
+
+Place Web App in Maintenance Mode on Heroku
+-------------------------------------------------------------------------------------
+
+This will take down the server without destroying the deployment project.
+
+Run the following commands in a linux/mac terminal:
+
+1.	Login to Heroku Account
+    * username: [input user email here]
+    * password: [input password here]
+
+* Enable Maintenance Mode:
+
+    heroku maintentance: on
+
+* Disable Maintenance Mode:
+
+    heroku maintentance: on
+
+* Check Maintenance Mode:
+
+    heroku maintentance
+
+
+Remove the Web App from Heroku
+-------------------------------------------------------------------------------------
+
+This command will permanently remove the app from Heroku.
+
+Run the following commands in a linux/mac terminal:
+
+1.	Login to Heroku Account
+    *   * username: [input user email here]
+    *   * password: [input password here]
+
+2.  heroku apps: destroy
+
+
+Redeploy the Web App with Heroku (After Deletion)
+-------------------------------------------------------------------------------------
+
+Online at https://id.heroku.com/login:
+1.	Login to Heroku Account
+    * username: [input user email here]
+    * password: [input password here]
+2.	Create new project with desired domain name
+
+Linux/Mac Terminal:
+3.	If Not Done:
+    * git clone git@github.com:RyanPencak/batterydiagnostics.git
+4.	cd bucknellbatterydiagnostics
+5.	heroku git:remote -a bucknellbatterydiagnostics
+6.	heroku buildpacks:add git@github.com:RyanPencak/batterydiagnostics.git
+7.	git add .
+8.	git commit -m “commit message”
+9.	git push heroku master
+
+
+-------------------------------------------------------------------------------------
 # Automated Software Testing
 
 Downloading Scripts
@@ -32,31 +194,6 @@ In Text Editor:
 4. 00 11 * * * /[path to script]/mac_battery_test.sh
 5. Use Crontab Syntax Generator: https://crontab-generator.org/
 6. Save and exit text editor
-
--------------------------------------------------------------------------------------
-# Web App Deployment
-
-Required Packages
--------------------------------------------------------------------------------------
-
-1.	node and npm
-    * https://www.npmjs.com/get-npmnpm
-
-
-Download Web App Source Files
--------------------------------------------------------------------------------------
-
-In Linux Terminal:
-1.	git clone https://github.com/Bucknell-ECE/bucknellbatterydiagnostics.git
-2.	cd bucknellbatterydiagnostics
-
-
-Run Web App Locally
--------------------------------------------------------------------------------------
-
-In Linux Terminal:
-1.	npm install
-2.	npm start
 
 
 -------------------------------------------------------------------------------------
