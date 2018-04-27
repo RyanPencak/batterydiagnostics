@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { Button, Glyphicon, Grid, Row, Col } from 'react-bootstrap';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Label, LabelList, ReferenceLine } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Label, LabelList, ReferenceLine } from 'recharts';
 
 export default class Report extends Component {
 
@@ -31,42 +31,44 @@ export default class Report extends Component {
 
         {/* React Bootstrap Grid */}
         <Grid>
-          <Row className="show-grid">
-            {/* Basic Battery Metrics */}
-            <Col xs={12} md={8}>
-              <div className="batterySpecs">
-                <h4>Serial Number: {this.props.serialNum}</h4>
-                <h4>Laptop ID: {this.props.laptopId}</h4>
-                {/* Mac vs. Windows Report Ternary: Windows uses mWh while Mac and hardware testing uses mAh */}
-                {
-                  this.props.isWindows
-                  ?
-                  <h4>Manufacturer Rated Maximum Capacity: {this.props.rCap} mWh</h4>
-                  :
-                  <h4>Manufacturer Rated Maximum Capacity: {this.props.rCap} mAh</h4>
-                }
-                {
-                  this.props.isWindows
-                  ?
-                  <h4>Immediate Maximum Capacity: {this.props.mCap[this.props.mCap.length-1]} mWh</h4>
-                  :
-                  <h4>Immediate Maximum Capacity: {this.props.mCap[this.props.mCap.length-1]} mAh</h4>
-                }
-              </div>
-            </Col>
-            {/* Battery Capacity Animation */}
-            <Col xs={12} md={4}>
-              <div className="batteryCapacity">
-                {
-                  (this.props.mCap[this.props.mCap.length - 1] / this.props.rCap) < .4
-                  ?
-                  <CircularProgressbar initialAnimation={true} className="progressbar-red" percentage={((this.props.mCap[this.props.mCap.length - 1] / this.props.rCap) * 100).toFixed(2)} />
-                  :
-                  <CircularProgressbar initialAnimation={true} className="progressbar-green" percentage={((this.props.mCap[this.props.mCap.length - 1] / this.props.rCap) * 100).toFixed(2)} />
-                }
-              </div>
-            </Col>
-          </Row>
+          <div className="reportSummary">
+            <Row className="show-grid">
+              {/* Basic Battery Metrics */}
+              <Col xs={12} md={8}>
+                <div className="batterySpecs">
+                  <h4><strong>Serial Number:</strong> {this.props.serialNum}</h4>
+                  <h4><strong>Laptop ID:</strong> {this.props.laptopId}</h4>
+                  {/* Mac vs. Windows Report Ternary: Windows uses mWh while Mac and hardware testing uses mAh */}
+                  {
+                    this.props.isWindows
+                    ?
+                    <h4><strong>Manufacturer Rated Maximum Capacity:</strong> {this.props.rCap} mWh</h4>
+                    :
+                    <h4><strong>Manufacturer Rated Maximum Capacity:</strong> {this.props.rCap} mAh</h4>
+                  }
+                  {
+                    this.props.isWindows
+                    ?
+                    <h4><strong>Immediate Maximum Capacity:</strong> {this.props.mCap[this.props.mCap.length-1]} mWh</h4>
+                    :
+                    <h4><strong>Immediate Maximum Capacity:</strong> {this.props.mCap[this.props.mCap.length-1]} mAh</h4>
+                  }
+                </div>
+              </Col>
+              {/* Battery Capacity Animation */}
+              <Col xs={12} md={4}>
+                <div className="batteryCapacity">
+                  {
+                    (this.props.mCap[this.props.mCap.length - 1] / this.props.rCap) < .4
+                    ?
+                    <CircularProgressbar initialAnimation={true} className="progressbar-red" percentage={((this.props.mCap[this.props.mCap.length - 1] / this.props.rCap) * 100).toFixed(2)} />
+                    :
+                    <CircularProgressbar initialAnimation={true} className="progressbar-green" percentage={((this.props.mCap[this.props.mCap.length - 1] / this.props.rCap) * 100).toFixed(2)} />
+                  }
+                </div>
+              </Col>
+            </Row>
+          </div>
 
           <Row className="show-grid">
             <div className="capPlot">
@@ -122,8 +124,8 @@ export default class Report extends Component {
                         <Label value="Capacity (mAh)" angle={-90} position="insideLeft" />
                       </YAxis>
                       {/* Optional Tooltip Animation */}
-                      <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} />
-                      <Legend verticalAlign="middle" layout="vertical" align="right" iconSize={26} height={36}/>
+                      {/* <Tooltip active={true} animationEasing="ease" cursor={false} animationDuration={50000} /> */}
+                      <Legend verticalAlign="top" height={36}/>
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

@@ -207,7 +207,7 @@ export default class BatteryLog extends Component {
 
   // handleScroll Function: only display button to return from battery report if below the battery data table
   handleScroll() {
-    if (this.state.reportSectionDisplayed && (document.body.scrollTop > 700 || document.documentElement.scrollTop > 700)) {
+    if (this.state.reportSectionDisplayed && (document.body.scrollTop > 420 || document.documentElement.scrollTop > 420)) {
       document.getElementById("upBtn").style.display = "block";
     }
     else if (this.state.reportSectionDisplayed) {
