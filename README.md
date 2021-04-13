@@ -1,6 +1,6 @@
 # Web App Architecture
 
-Front End (src)
+Back End (server)
 -------------------------------------------------------------------------------------
 
 ###### app:
@@ -21,7 +21,7 @@ Front End (src)
   * emailRoutes: define HTTP request routes for email instances
 
 
-Back End (server)
+Front End (src)
 -------------------------------------------------------------------------------------
 
 ###### App:
